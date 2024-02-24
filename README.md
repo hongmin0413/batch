@@ -1,4 +1,13 @@
 # batch
+* gitBat\gitConfig.bat：
+	* 調整git config的程式
+
+* gitBat\init.bat：
+	* 初始化git時點擊的程式
+
+* gitBat\update.bat：
+	* 執行push or 執行pull or 看status時實際執行的程式
+
 * backup_com.bat`(公司用)`：
 	* 備份program、server、DB
 	* 7-Zip程式位置不同時，zipExe要更新
