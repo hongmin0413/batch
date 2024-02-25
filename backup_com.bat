@@ -139,8 +139,8 @@ if "%serverName%" neq "" (
 rem dbName有值才備份 
 if "%dbName%" neq "" (
 	echo ================================================================================ 
-	set tempDbName=%dbName%
 	rem 拆解dbName做備份 
+	set tempDbName=%dbName%
 	:splitDbName
 	for /f "tokens=1,* delims=、" %%i in ("!tempDbName!") do (
 		set singleDbName=%%i
