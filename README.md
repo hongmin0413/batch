@@ -1,12 +1,15 @@
 # batch
 * gitBat\gitConfig.bat：
 	* 調整git config的程式
+	* 確認config.ini的值是否正確
 
 * gitBat\init.bat：
 	* 初始化git時點擊的程式
+	* 確認config.ini的值是否正確
 
 * gitBat\update.bat：
 	* 執行push or 執行pull or 看status時實際執行的程式
+	* 確認config.ini的值是否正確
 
 * backup_com.bat`(公司用)`：
 	* 備份program、server、DB
@@ -17,10 +20,13 @@
 	* db移除或離線時，dbName要更新
 	* 排程：每月最後一天的的17:00執行，錯過後會盡快執行
 
-* `(尚未完成)`backup.bat：
-	* 備份重要資料至隨身碟中
+* backup.bat：
+	* 備份重要資料至C槽、D槽、隨身碟中
 	* 7-Zip程式位置不同時，zipExe要更新
-	* 備份位置不同時，backupRoot、backupBackup、dbBackupRoot要更新
+	* 備份位置不同時，backupRoot1、backupRoot2、backupRoot3、backupBackup、sqlServerBackupRoot、mySqlBackupRoot要更新
+	* file位置不同時，fileDisc、fileName要更新
+	* db移除或離線時，sqlServerInfo、sqlServerDbName、mySqlInfo、mySqlDbName要更新
+	* 確認config.ini的值是否正確
 	* 排程：每月最後一天的15:00執行，錯過後會盡快執行
 	* `備份重要資料.xml`
 
