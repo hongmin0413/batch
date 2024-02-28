@@ -4,11 +4,11 @@ chcp 65001>nul
 set msgExe=%~dp0%\msg.exe
 
 rem 若不備份某一路徑，直接註解即可 
-set usbBackupDisc1=E:
-set usbBackupDisc2=F:
 set backupRoot1=C:\backup
 set backupRoot2=D:\backup
+set usbBackupDisc1=E:
 set backupRoot3=%usbBackupDisc1%\backup_computer
+set usbBackupDisc2=F:
 set backupRoot4=%usbBackupDisc2%\backup_computer
 set backupBackup=history
 rem 讀取config.ini並設為參數
