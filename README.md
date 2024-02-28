@@ -11,15 +11,6 @@
 	* 執行push or 執行pull or 看status時實際執行的程式
 	* 確認config.ini的值是否正確
 
-* backup_com.bat`(公司用)`：
-	* 備份program、server、DB
-	* 7-Zip程式位置不同時，zipExe要更新
-	* 備份位置不同時，backupRoot、backupBackup、dbBackupRoot要更新
-	* program位置不同時，programRoot、programName要更新
-	* server位置不同時，serverRoot、serverName要更新
-	* db移除或離線時，dbName要更新
-	* 排程：每月最後一天的的17:00執行，錯過後會盡快執行
-
 * backup.bat：
 	* 備份重要資料至C槽、D槽、隨身碟中
 	* 7-Zip程式位置不同時，zipExe要更新
@@ -29,6 +20,15 @@
 	* 確認config.ini的值是否正確
 	* 排程：每月最後一天的15:00執行，錯過後會盡快執行
 	* `備份重要資料.xml`
+
+* backup_com.bat`(公司用)`：
+	* 備份program、server、DB
+	* 7-Zip程式位置不同時，zipExe要更新
+	* 備份位置不同時，backupRoot、backupBackup、dbBackupRoot要更新
+	* program位置不同時，programRoot、programName要更新
+	* server位置不同時，serverRoot、serverName要更新
+	* db移除或離線時，dbName要更新
+	* 排程：每月最後一天的的17:00執行，錯過後會盡快執行
 
 * bcompareAddTime.bat：
 	* 延長bcompare時間
@@ -44,12 +44,35 @@
 	* 本機排程：每天每10分鐘背景執行
 	* 公司排程：平日09:00-19:00，每10分鐘背景執行
 	* `提醒筆電充電狀態.xml`
+	
+* (尚未完成)computerPowerUp.bat：
+	* 筆電開機後要先開啟的應用程式
+	* 應用程式位置不同時，相關exe要更新
+	* 應用程式預設開啟的專案不同時，相關專案名稱要更新
+	* 排程：登入時(筆電剛開機登入時)延後1分鐘背景執行
+	* `筆電開機後要先開啟的應用程式.xml`
+
+* (尚未完成)computerPowerUp_com.bat`(公司用)`：
+	* 筆電開機後要先開啟的應用程式
+	* 應用程式位置不同時，相關exe要更新
+	* 應用程式預設開啟的專案不同時，相關專案名稱要更新
+	* 排程：登入時(筆電剛開機登入時)延後1分鐘背景執行
 
 * svnUpdate_com.bat`(公司用)`：
 	* 更新SVN
 	* SVN程式位置不同時，svnExe要更新
 	* 要更新的資料夾位置不同時，updateRootFile要更新
 	* 排程：平日09:00、14:30執行，錯過後會盡快執行
+	
+* util.bat：
+	* bat功能大集合
+	* call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
+	* call util.bat "backupSqlServer" "%sqlServerInfo%" "%sqlServerDbName%"
+		* sqlServerInfo型式：-S ${host} -port ${port} -U ${user} -P ${password}
+		*sqlServerDbName若有多個db，請用"、"區隔
+	* call util.bat "backupMySql" "%mySqlInfo%" "%mySqlDbName%"
+		* mySqlInfo型式：host=${host} port=${port} user=${user}  password=${password}
+		*mySqlDbName若有多個db，請用"、"區隔
 
 **不上傳至github：**
 * msg.exe：

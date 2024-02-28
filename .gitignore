@@ -1,2 +1,6 @@
 msg.exe
 config.ini
+
+#先暫時排除
+computerPowerUp.bat
+computerPowerUp_com.bat
