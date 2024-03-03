@@ -28,7 +28,7 @@
 	* program位置不同時，programRoot、programName要更新
 	* server位置不同時，serverRoot、serverName要更新
 	* db移除或離線時，dbName要更新
-	* 排程：每月最後一天的的17:00執行，錯過後會盡快執行
+	* 排程：每月最後一天的的18:00執行，錯過後會盡快執行
 
 * bcompareAddTime.bat：
 	* 延長bcompare時間
@@ -45,14 +45,14 @@
 	* 公司排程：平日09:00-19:00，每10分鐘背景執行
 	* `提醒筆電充電狀態.xml`
 	
-* (尚未完成)computerPowerUp.bat：
+* computerPowerUp.bat：
 	* 筆電開機後要先開啟的應用程式
 	* 應用程式位置不同時，相關exe要更新
 	* 應用程式預設開啟的專案不同時，相關專案名稱要更新
 	* 排程：登入時(筆電剛開機登入時)延後1分鐘背景執行
 	* `筆電開機後要先開啟的應用程式.xml`
 
-* (尚未完成)computerPowerUp_com.bat`(公司用)`：
+* computerPowerUp_com.bat`(公司用)`：
 	* 筆電開機後要先開啟的應用程式
 	* 應用程式位置不同時，相關exe要更新
 	* 應用程式預設開啟的專案不同時，相關專案名稱要更新

@@ -4,12 +4,12 @@ chcp 65001>nul
 set msgExe=%~dp0%\msg.exe
 
 rem 若不備份某一路徑，直接註解即可 
-set backupRoot1=C:\backup
-set backupRoot2=D:\backup
+set backupRoot=C:\backup
+set otherBackupRoot1=D:\backup
 set usbBackupDisc1=E:
-set backupRoot3=%usbBackupDisc1%\backup_computer
+set otherBackupRoot2=%usbBackupDisc1%\backup_computer
 set usbBackupDisc2=F:
-set backupRoot4=%usbBackupDisc2%\backup_computer
+set otherBackupRoot3=%usbBackupDisc2%\backup_computer
 set backupBackup=history
 rem 讀取config.ini並設為參數
 for /f "delims=" %%i in ('type "config.ini"^| find /i "="') do set %%i
@@ -19,10 +19,11 @@ echo 請按任意鍵繼續...
 pause>nul
 
 rem 若備份root不存在，先建其資料夾 
-if not exist "%backupRoot1%" (
-	mkdir "%backupRoot1%"
+if not exist "%backupRoot%" (
+	mkdir "%backupRoot%"
 )
 rem ==============================以下為桌面的檔案===================================== 
+:disc_desktop
 set fileDisc=C:\Users\User\OneDrive\桌面
 set backupDiscName=disc-desktop
 call :initialBackupDisc
@@ -32,6 +33,7 @@ set fileName=program
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem ==============================以上為桌面的檔案===================================== 
 rem ==============================以下為C槽的檔案===================================== 
+:disc_c
 set fileDisc=C:
 set backupDiscName=disc-c
 call :initialBackupDisc
@@ -62,6 +64,7 @@ set fileName=javaWeb_setting
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem ==============================以上為C槽的檔案===================================== 
 rem ==============================以下為D槽的檔案===================================== 
+:disc_d
 set fileDisc=D:
 set backupDiscName=disc-d
 call :initialBackupDisc
@@ -138,26 +141,25 @@ call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem 備份Q-Dir 
 set fileName=Q-Dir
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
-rem ==============================以上為D槽的檔案=====================================
+rem ==============================以上為D槽的檔案===================================== 
 echo ================================================================================ 
-echo 開始備份到%backupRoot2%中... 
-set otherBackupRoot=%backupRoot2%
+echo 開始備份到%otherBackupRoot1%中... 
+set otherBackupRoot=%otherBackupRoot1%
 call :copyToOtherBakupRoot
 
-echo 開始備份到%backupRoot3%中... 
+echo 開始備份到%otherBackupRoot2%中... 
 rem 先檢查是否插入隨身碟 
 set usbBackupDisc=%usbBackupDisc1%
 call :checkUsbBackupDisc
-set otherBackupRoot=%backupRoot3%
+set otherBackupRoot=%otherBackupRoot2%
 call :copyToOtherBakupRoot
 
-echo 開始備份到%backupRoot4%中... 
+echo 開始備份到%otherBackupRoot3%中... 
 rem 先檢查是否插入隨身碟 
 set usbBackupDisc=%usbBackupDisc2%
 call :checkUsbBackupDisc
-set otherBackupRoot=%backupRoot4%
+set otherBackupRoot=%otherBackupRoot3%
 call :copyToOtherBakupRoot
-
 echo ================================================================================ 
 set msg=備份完畢 
 if exist "%msgExe%" (
@@ -171,7 +173,7 @@ exit
 
 rem 初始化備份路徑 
 :initialBackupDisc
-set backupPath=%backupRoot1%\%backupDiscName%
+set backupPath=%backupRoot%\%backupDiscName%
 set backupBackupPath=%backupPath%\%backupBackup%\
 if not exist "%backupPath%" (
 	mkdir "%backupPath%"
@@ -188,12 +190,12 @@ rem 備份至其它備份root中
 if "%otherBackupRoot%" equ "" (
 	echo 其它備份root未設定，不備份 
 )else (
-	rem 若其它備份root中存在，先刪除整個備份root(為了逹到內容一致) 
-	if exist "%otherBackupRoot%" (
-		rmdir /s /q "%otherBackupRoot%">nul
+	rem 若其它備份root中不存在，先建其資料夾 
+	if not exist "%otherBackupRoot%" (
+		mkdir "%otherBackupRoot%">nul
 	)
-	mkdir "%otherBackupRoot%">nul
-	xcopy /y /i /e "%backupRoot1%" "%otherBackupRoot%">nul
+	rem 113.03.03 改用robocopy增加效率
+	robocopy /mir /mt:32 "%backupRoot%" "%otherBackupRoot%">nul
 )
 set otherBackupRoot=
 goto :eof
