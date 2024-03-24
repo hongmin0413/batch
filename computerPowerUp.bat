@@ -16,7 +16,7 @@ setlocal enabledelayedexpansion
 rem 開啟eclipse 
 if %isOpenEclipse% equ true (
     set eclipseExe=C:\Users\User\eclipse\jee-2021-12\eclipse\eclipse.exe
-    start "" /min "!eclipseExe!" -data "D:\eclipse-workspace_JavaWeb\ALMS_new" && timeout /t 10 /nobreak>nul
+    start "" /min "!eclipseExe!" -data "D:\eclipse-workspace_JavaWeb" && timeout /t 10 /nobreak>nul
 )
 
 rem 開啟vs code 
