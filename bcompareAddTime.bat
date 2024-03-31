@@ -5,7 +5,7 @@ set bcompare="HKEY_CURRENT_USER\Software\Scooter Software\Beyond Compare 4"
 set addTimeKey=CacheID
 
 rem 檢查是否有addTimeKey
-for /f "delims=" %%i in ('reg query %key% /v "*" ^| findstr /i "%addTimeKey%"') do (
+for /f "delims=" %%i in ('reg query %bcompare% /v "*" ^| findstr /i "%addTimeKey%"') do (
 	goto addTime
 )
 exit
