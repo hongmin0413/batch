@@ -107,7 +107,7 @@ if "%programName%" neq "" (
 		rem program備份檔若存在就先移到備份的備份中 
 		set program7z=!backupPath!\%programName%.7z
 		if exist "!program7z!" (
-			echo 有program備份檔，先移到備份的備份中 
+			echo 有【%orgName%】版的program備份檔，先移到備份的備份中 
 			move /y "!program7z!" !backupBackupPath!>nul
 		)
 		echo 開始備份【%orgName%】版的program... 
@@ -126,7 +126,7 @@ if "%serverName%" neq "" (
 		rem server備份檔若存在就先移到備份的備份中 
 		set server7z=!backupPath!\%serverName%.7z
 		if exist "!server7z!" (
-			echo 有server備份檔，先移到備份的備份中 
+			echo 有【%orgName%】版的server備份檔，先移到備份的備份中 
 			move /y "!server7z!" !backupBackupPath!>nul
 		)
 		echo 開始備份【%orgName%】版的server... 
@@ -154,7 +154,7 @@ if "%dbName%" neq "" (
 			rem c槽的db備份檔若存在就先移到備份的備份中 
 			set dbBak=!backupPath!\!singleDbName!.bak
 			if exist "!dbBak!" (
-				echo c槽有db備份檔，先移到備份的備份中 
+				echo 有【%orgName%】版的db-!singleDbName!備份檔，先移到備份的備份中 
 				move /y "!dbBak!" !backupBackupPath!>nul
 			)
 			rem d槽的db備份檔若存在就先刪除 

@@ -36,8 +36,8 @@ if "%fileName%" neq "" (
 		rem file壓縮檔若存在就刪除 
 		set file7z=%zipPath%\%fileName%.7z
 		if exist "!file7z!" (
-			echo 有file壓縮檔，先刪除
-			del /f /q "!file7z!">nul
+			echo 有【!file!】壓縮檔，先刪除 
+			del /f "!file7z!">nul
 		)
 		echo 開始壓縮【!file!】... 
 		"%zipExe%" a -t7z "!file7z!" "!file!">nul 
@@ -70,7 +70,8 @@ if "%sqlServerDbName%" neq "" (
 			rem sqlServerDb備份檔若存在就先刪除 
 			set sqlServerdbBak=%sqlServerBackupRoot%\!singleSqlServerDbName!.bak
 			if exist "!sqlServerdbBak!" (
-				del /f /q "!sqlServerdbBak!">nul
+                echo 有sqlServer的db-!singleSqlServerDbName!備份檔，先刪除 
+				del /f "!sqlServerdbBak!">nul
 			)
 			echo 開始備份sqlServer的db-!singleSqlServerDbName!... 
 			sqlcmd %sqlServerInfo% -Q "BACKUP DATABASE !singleSqlServerDbName! TO DISK = '!sqlServerdbBak!'">nul 
@@ -119,7 +120,8 @@ if "%mySqlDbName%" neq "" (
 			rem mySqlDb備份檔若存在就先刪除 
 			set mySqldbSql=%mySqlBackupRoot%\!singleMySqlDbName!.sql
 			if exist "!mySqldbSql!" (
-				del /f /q "!mySqldbSql!">nul
+                echo 有mySql的db-!singleMySqlDbName!備份檔，先刪除 
+				del /f "!mySqldbSql!">nul
 			)
 			echo 開始備份mySql的db-!singleMySqlDbName!... 
 			mysqldump --defaults-extra-file=!cnf! --no-tablespaces --set-gtid-purged=OFF "!singleMySqlDbName!" >"!mySqldbSql!" 
