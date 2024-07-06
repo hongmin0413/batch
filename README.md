@@ -1,13 +1,13 @@
 # batch
-* gitBat\gitConfig.bat：
+* gitBatch\gitConfig.bat：
 	* 調整git config的程式
 	* 確認config.ini的值是否正確
 
-* gitBat\init.bat：
+* gitBatch\init.bat：
 	* 初始化git時點擊的程式
 	* 確認config.ini的值是否正確
 
-* gitBat\update.bat：
+* gitBatch\update.bat：
 	* 執行push or 執行pull or 看status時實際執行的程式
 	* 確認config.ini的值是否正確
 
