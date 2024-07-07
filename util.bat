@@ -6,7 +6,13 @@ set sqlServerBackupRoot=D:\DB\sqlServer2019\Backup
 set mySqlBackupRoot=D:\DB\mySql8\Backup
 
 set action=%~1
-if "%action%" equ "zipFile" (
+rem 113.07.07 增加移動檔案 
+if "%action%" equ "moveFile" (
+	set destPath=%~2
+	set filePath=%~3
+	set fileName=%~4
+	call :moveFile
+)else if "%action%" equ "zipFile" (
 	set zipPath=%~2
 	set fileDisc=%~3
 	set fileName=%~4
@@ -21,7 +27,30 @@ if "%action%" equ "zipFile" (
 	set mySqlInfo=%~2
 	set mySqlDbName=%~3
 	call :backupMySql
+rem 113.07.07 將backup.bat的檢查是否插入隨身碟放到這邊 
+) else if "%action%" equ "checkIsHasUsb" (
+	set usbDisc=%~2
+	call :checkIsHasUsb
 )
+goto :eof
+
+rem 移動檔案 
+:moveFile
+setlocal enabledelayedexpansion
+rem fileName有值才移動 
+if "%fileName%" neq "" (
+	echo ================================================================================
+	rem 要移動的file存在才移動 
+	set file=%filePath%\%fileName%
+	if exist "!file!" (
+		echo 開始移動【!file!】... 
+		robocopy /mir /mt:32 "!file!" "%destPath%\%fileName%">nul 
+		echo 【!file!】移動完畢
+	)else (
+		echo 【!file!】不存在，不移動
+	)
+)
+endlocal
 goto :eof
 
 rem 壓縮檔案 
@@ -30,7 +59,7 @@ setlocal enabledelayedexpansion
 rem fileName有值才壓縮 
 if "%fileName%" neq "" (
 	echo ================================================================================
-	rem 要壓縮的file存在才備份 
+	rem 要壓縮的file存在才壓縮 
 	set file=%fileDisc%\%fileName%
 	if exist "!file!" (
 		rem file壓縮檔若存在就刪除 
@@ -137,4 +166,18 @@ if "%mySqlDbName%" neq "" (
 	del /f "mysql.cnf"
 )
 endlocal
+goto :eof
+
+rem 檢查是否插入隨身碟 
+:checkIsHasUsb
+if "%usbDisc%" equ "" (
+	echo usb槽未設定，不備份 
+	echo 請按任意鍵退出... 
+	pause>nul
+	exit
+)else if not exist "%usbDisc%" (
+	echo 請插入隨身碟^(%usbDisc%^)，再按任意鍵繼續備份... 
+	pause>nul
+	goto checkIsHasUsb
+)
 goto :eof

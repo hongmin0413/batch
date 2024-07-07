@@ -149,15 +149,13 @@ call :copyToOtherBakupRoot
 
 echo 開始備份到%otherBackupRoot2%中... 
 rem 先檢查是否插入隨身碟 
-set usbBackupDisc=%usbBackupDisc1%
-call :checkUsbBackupDisc
+call util.bat "checkIsHasUsb" "%usbBackupDisc1%"
 set otherBackupRoot=%otherBackupRoot2%
 call :copyToOtherBakupRoot
 
 echo 開始備份到%otherBackupRoot3%中... 
 rem 先檢查是否插入隨身碟 
-set usbBackupDisc=%usbBackupDisc2%
-call :checkUsbBackupDisc
+call util.bat "checkIsHasUsb" "%usbBackupDisc2%"
 set otherBackupRoot=%otherBackupRoot3%
 call :copyToOtherBakupRoot
 echo ================================================================================ 
@@ -166,7 +164,7 @@ if exist "%msgExe%" (
 	"%msgExe%" ^* "%msg%" 
 )else (
 	echo %msg% 
-	echo 請按任意鍵退出...
+	echo 請按任意鍵退出... 
 	pause>nul
 )
 exit
@@ -198,16 +196,4 @@ if "%otherBackupRoot%" equ "" (
 	robocopy /mir /mt:32 "%backupRoot%" "%otherBackupRoot%">nul
 )
 set otherBackupRoot=
-goto :eof
-
-rem 檢查是否插入隨身碟 
-:checkUsbBackupDisc
-if "%usbBackupDisc%" equ "" (
-	echo usb槽未設定，不備份 
-)else if not exist "%usbBackupDisc%" (
-	echo 請插入隨身碟^(%usbBackupDisc%^)，再按任意鍵繼續備份... 
-	pause>nul
-	goto checkUsbBackupDisc
-)
-set usbBackupDisc=
 goto :eof

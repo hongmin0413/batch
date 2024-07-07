@@ -14,12 +14,18 @@
 * backup.bat：
 	* 備份重要資料至C槽、D槽、隨身碟中
 	* 7-Zip程式位置不同時，zipExe要更新
-	* 備份位置不同時，backupRoot1、backupRoot2、backupRoot3、backupBackup、sqlServerBackupRoot、mySqlBackupRoot要更新
+	* 備份位置不同時，backupRoot、otherBackupRoot1、otherBackupRoot2、otherBackupRoot3、backupBackup、sqlServerBackupRoot、mySqlBackupRoot要更新
 	* file位置不同時，fileDisc、fileName要更新
 	* db移除或離線時，sqlServerInfo、sqlServerDbName、mySqlInfo、mySqlDbName要更新
 	* 確認config.ini的值是否正確
 	* 排程：每月最後一天的15:00執行，錯過後會盡快執行
 	* `備份重要資料.xml`
+
+* backup_cloud.bat`(待完成)`：
+	* 備份雲端重要資料至隨身碟中
+	* 備份位置不同時，backupRoot要更新
+	* file位置不同時，cloudFile、fileName要更新
+	*先將雲端資料移動至cloudFile中，再點擊此bat檔
 
 * backup_com.bat`(公司用)`：
 	* 備份program、server、DB
@@ -29,6 +35,12 @@
 	* server位置不同時，serverRoot、serverName要更新
 	* db移除或離線時，dbName要更新
 	* 排程：每月最後一天的的18:00執行，錯過後會盡快執行
+
+* backup_phone.bat：
+	* 備份手機重要資料至隨身碟中
+	* 備份位置不同時，backupRoot要更新
+	* file位置不同時，phoneFile、fileName要更新
+	*先將手機資料移動至phoneFile中，再點擊此bat檔
 
 * bcompareAddTime.bat：
 	* 延長bcompare時間
