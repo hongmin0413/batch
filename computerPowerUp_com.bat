@@ -45,6 +45,7 @@ if %isOpenBcompare% equ true (
 	"!bcompareExe!" "MOADomsEE <--> workspace_農險基金"
 	"!bcompareExe!" "MOADomsEE <--> workspace_經濟部"
 	"!bcompareExe!" "OASystemEE <--> workspace_經濟部OA"
+    rem "!bcompareExe!" "經濟部OA\OASystem_settings"
 	start "" /min "!bcompareExe!" "!currentOrgName!\MOADoms_settings"
 )
 

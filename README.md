@@ -25,7 +25,7 @@
 	* 備份雲端重要資料至隨身碟中
 	* 備份位置不同時，backupRoot要更新
 	* file位置不同時，cloudFile、fileName要更新
-	*先將雲端資料移動至cloudFile中，再點擊此bat檔
+	* 先將雲端資料移動至cloudFile中，再點擊此bat檔
 
 * backup_com.bat`(公司用)`：
 	* 備份program、server、DB
@@ -40,7 +40,7 @@
 	* 備份手機重要資料至隨身碟中
 	* 備份位置不同時，backupRoot要更新
 	* file位置不同時，phoneFile、fileName要更新
-	*先將手機資料移動至phoneFile中，再點擊此bat檔
+	* 先將手機資料移動至phoneFile中，再點擊此bat檔
 
 * bcompareAddTime.bat：
 	* 延長bcompare時間
