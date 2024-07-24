@@ -36,17 +36,18 @@ if %isOpenBcompare% equ true (
 	set bcompareExe=D:\Tools\BC\Beyond Compare 4\BCompare.exe
 	rem 先讀取程式設定檔的config.ini 
 	rem 113.05.15 調整程式設定檔config.ini的路徑 
+	rem 113.07.23 參考開啟eclipse方式，確保開啟順序且不會中途卡住 
 	for /f "delims=" %%i in ('type "C:\Project\JavaProject\更新機關設定檔指令\config.ini"^| find /i "="') do set %%i
-	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_農業部"
-	"!bcompareExe!" "MOADomsEE <--> workspace_智慧局"
-	rem "!bcompareExe!" "MOADomsEE <--> workspace_智慧局_111增修"
-	"!bcompareExe!" "MOADomsEE <--> workspace_國發會"
-	rem "!bcompareExe!" "MOADomsEE <--> workspace_國發會_111增修"
-	"!bcompareExe!" "MOADomsEE <--> workspace_農險基金"
-	"!bcompareExe!" "MOADomsEE <--> workspace_經濟部"
-	"!bcompareExe!" "OASystemEE <--> workspace_經濟部OA"
-    rem "!bcompareExe!" "經濟部OA\OASystem_settings"
-	start "" /min "!bcompareExe!" "!currentOrgName!\MOADoms_settings"
+	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_農業部" && timeout /t 3 /nobreak>nul
+	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_智慧局" && timeout /t 3 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_智慧局_111增修" && timeout /t 3 /nobreak>nul
+	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_國發會" && timeout /t 3 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_國發會_111增修" && timeout /t 3 /nobreak>nul
+	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_農險基金" && timeout /t 3 /nobreak>nul
+	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_經濟部" && timeout /t 3 /nobreak>nul
+	start "" /min "!bcompareExe!" "OASystemEE <--> workspace_經濟部OA" && timeout /t 3 /nobreak>nul
+	start "" /min "!bcompareExe!" "!currentOrgName!\MOADoms_settings" && timeout /t 3 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "經濟部OA\OASystem_settings" && timeout /t 3 /nobreak>nul
 )
 
 rem 開啟chrome 

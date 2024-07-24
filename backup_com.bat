@@ -20,10 +20,11 @@ if not exist "%backupRoot%" (
 )
 
 rem 備份農業部 
+rem 113.07.23 增加備份MOADoms2501 
 set orgName=農業部 
 set programName=workspace_MOA_COA
 set serverName=wildfly-21.0.0.Final_COA
-set dbName=MOADoms00、MOADoms25、eipdb
+set dbName=MOADoms00、MOADoms25、eipdb、MOADoms2501
 call :backup
 
 rem 備份智慧局 
