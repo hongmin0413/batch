@@ -50,7 +50,6 @@ if %action% equ 2 (
 :commitAndPush
 rem 先檢查程式碼是否更新 
 call :seeStatus
-:setAddFile
 rem 113.10.02 增加設定要add的檔案並檢查是否都存在 
 set /p addFile=請輸入要add的檔案(多個檔案請以一個空格區隔、子檔案的路徑請用"/"，預設全部)：
 if "%addFile%" equ "" (
