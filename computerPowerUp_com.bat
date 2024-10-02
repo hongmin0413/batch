@@ -1,4 +1,4 @@
-@echo off
+rem @echo off
 chcp 65001>nul
 
 rem 是否開啟應用程式的布林值 
@@ -14,16 +14,21 @@ setlocal enabledelayedexpansion
 
 rem 開啟eclipse 
 if %isOpenEclipse% equ true (
-	set eclipseExe1=D:\APPS\eclipse-jee-2020-12-R\eclipse.exe
-	set eclipseExe2=D:\APPS\eclipse-jee-2023-06-R\eclipse.exe
-	start "" /min "!eclipseExe1!" -data "D:\workspace\農業部\workspace_MOA_COA" && timeout /t 10 /nobreak>nul
-	start "" /min "!eclipseExe1!" -data "D:\workspace\智慧局\workspace_MOA_TIPO" && timeout /t 10 /nobreak>nul
-	rem start "" /min "!eclipseExe1!" -data "D:\workspace\智慧局_111增修\workspace_MOA_TIPO" && timeout /t 10 /nobreak>nul
-	start "" /min "!eclipseExe1!" -data "D:\workspace\國發會\workspace_MOA_CI" && timeout /t 10 /nobreak>nul
-	rem start "" /min "!eclipseExe1!" -data "D:\workspace\國發會_111增修\workspace_MOA_CI" && timeout /t 10 /nobreak>nul
-	rem start "" /min "!eclipseExe1!" -data "D:\workspace\農險基金\workspace_MOA_農保基金" && timeout /t 10 /nobreak>nul
-	start "" /min "!eclipseExe1!" -data "D:\workspace\經濟部\workspace_MOA_MOEA" && timeout /t 10 /nobreak>nul
-	rem start "" /min "!eclipseExe2!" -data "D:\workspace\經濟部OA\workspace_OASystem_JDK17" && timeout /t 10 /nobreak>nul
+	rem 113.08.22 調整為直接call另一個資料夾寫好的bat 
+	set openEclipseBatDir="D:\workspace\開啟程式編輯器"
+	if exist %openEclipseBatDir% (
+		rem 113.09.16 直接進到資料夾call，因為bat的內容是用相對路徑執行的 
+		cd %openEclipseBatDir%
+		call "農業部.bat" && timeout /t 10 /nobreak>nul
+		call "智慧局.bat" && timeout /t 10 /nobreak>nul
+		rem call "智慧局_111增修.bat" && timeout /t 10 /nobreak>nul
+		call "國發會.bat" && timeout /t 10 /nobreak>nul
+		rem call "國發會_111增修.bat" && timeout /t 10 /nobreak>nul
+		rem call "農險基金.bat" && timeout /t 10 /nobreak>nul
+		call "經濟部.bat" && timeout /t 10 /nobreak>nul
+		rem call "經濟部OA.bat" && timeout /t 10 /nobreak>nul
+		cd "%~dp0"
+	)
 )
 
 rem 開啟Q-dir 

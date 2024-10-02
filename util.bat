@@ -171,12 +171,12 @@ goto :eof
 rem 檢查是否插入隨身碟 
 :checkIsHasUsb
 if "%usbDisc%" equ "" (
-	echo usb槽未設定，不備份 
+	echo usb槽未設定，不檢查是否插入隨身碟 
 	echo 請按任意鍵退出... 
 	pause>nul
 	exit
 )else if not exist "%usbDisc%" (
-	echo 請插入隨身碟^(%usbDisc%^)，再按任意鍵繼續備份... 
+	echo 請插入隨身碟^(%usbDisc%^)，再按任意鍵繼續... 
 	pause>nul
 	goto checkIsHasUsb
 )
