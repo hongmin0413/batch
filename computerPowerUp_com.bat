@@ -1,4 +1,4 @@
-rem @echo off
+@echo off
 chcp 65001>nul
 
 rem 是否開啟應用程式的布林值 
