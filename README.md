@@ -83,10 +83,10 @@
 	* call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 	* call util.bat "backupSqlServer" "%sqlServerInfo%" "%sqlServerDbName%"
 		* sqlServerInfo型式：-S ${host} -port ${port} -U ${user} -P ${password}
-		*sqlServerDbName若有多個db，請用"、"區隔
+		* sqlServerDbName若有多個db，請用"、"區隔
 	* call util.bat "backupMySql" "%mySqlInfo%" "%mySqlDbName%"
 		* mySqlInfo型式：host=${host} port=${port} user=${user}  password=${password}
-		*mySqlDbName若有多個db，請用"、"區隔
+		* mySqlDbName若有多個db，請用"、"區隔
 	* call util.bat "checkIsHasUsb" "%usbDisc%" 
 
 **不上傳至github：**
