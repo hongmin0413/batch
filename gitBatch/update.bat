@@ -26,6 +26,7 @@ if "%gitName%" equ "" (
 )
 rem 讀取config.ini並設為參數 
 for /f "delims=" %%i in ('type "config.ini"^| find /i "="') do set %%i
+echo 欲執行的資料夾：%cd%\%dirName% 
 echo 欲執行的專案：%gitName% 
 
 rem 詢問欲執行的動作 
@@ -49,13 +50,19 @@ if %action% equ 2 (
 :commitAndPush
 rem 先檢查程式碼是否更新 
 call :seeStatus
+:setAddFile
+rem 113.10.02 增加設定要add的檔案並檢查是否都存在 
+set /p addFile=請輸入要add的檔案(多個檔案請以一個空格區隔、子檔案的路徑請用"/"，預設全部)：
+if "%addFile%" equ "" (
+	set addFile=.
+)
 rem 設定commit的訊息 
-set /p commitMsg=請輸入commit %dirName% 的訊息(預設update %gitName%)：
+set /p commitMsg=請輸入要commit的訊息(預設update %gitName%)：
 if "%commitMsg%" equ "" (
 	set commitMsg=update %gitName%
 )
 echo 開始commit
-git add .
+git add %addFile%
 git commit -m "%commitMsg%"
 echo commit成功 
 :push

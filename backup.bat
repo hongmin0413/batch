@@ -179,8 +179,9 @@ if not exist "%backupPath%" (
 if not exist "%backupBackupPath%" (
 	mkdir "%backupBackupPath%"
 )
-rem backupPath中有檔案就丟到backupBackupPath中 
-dir /b "%backupPath%"| findstr /r /v "%backupBackup%">nul && move /y "%backupPath%\*.*" "%backupBackupPath%">nul
+rem backupPath中有backupBackup就丟到backupBackupPath中 
+rem 113.10.02 修正不管有沒有找到都會丟到backupBackupPath中的問題 
+dir /b "%backupPath%" | findstr "%backupBackup%">nul && move /y "%backupPath%\*.*" "%backupBackupPath%">nul
 goto :eof
 
 rem 備份至其它備份root中 
