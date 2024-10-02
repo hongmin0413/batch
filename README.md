@@ -21,10 +21,11 @@
 	* 排程：每月最後一天的15:00執行，錯過後會盡快執行
 	* `備份重要資料.xml`
 
-* backup_cloud.bat`(待完成)`：
+* backup_cloud.bat：
 	* 備份雲端重要資料至隨身碟中
 	* 備份位置不同時，backupRoot要更新
 	* file位置不同時，cloudFile、fileName要更新
+	* 雲端名稱不同時，cloudName要更新
 	* 先將雲端資料移動至cloudFile中，再點擊此bat檔
 
 * backup_com.bat`(公司用)`：
@@ -78,6 +79,7 @@
 	
 * util.bat：
 	* bat功能大集合
+	* call util.bat "moveFile" "%destPath%" "%filePath%" "%fileName%"
 	* call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 	* call util.bat "backupSqlServer" "%sqlServerInfo%" "%sqlServerDbName%"
 		* sqlServerInfo型式：-S ${host} -port ${port} -U ${user} -P ${password}
@@ -85,6 +87,7 @@
 	* call util.bat "backupMySql" "%mySqlInfo%" "%mySqlDbName%"
 		* mySqlInfo型式：host=${host} port=${port} user=${user}  password=${password}
 		*mySqlDbName若有多個db，請用"、"區隔
+	* call util.bat "checkIsHasUsb" "%usbDisc%" 
 
 **不上傳至github：**
 * msg.exe：

@@ -3,7 +3,7 @@ chcp 65001>nul
 
 set msgExe=%~dp0%\msg.exe
 
-set phoneFile=D:\phoneFile
+set phoneFile=C:\backupPhoneAndCloud\phoneFile
 set usbBackupDisc=E:
 set backupRoot=%usbBackupDisc%\backup_phone
 
