@@ -33,8 +33,11 @@ if %isOpenQ-dir% equ true (
 rem 開啟bcompare 
 if %isOpenBcompare% equ true (
     set bcompareExe=D:\Beyond Compare 4\BCompare.exe
-	start "" /min "!bcompareExe!" "ALMS"
-    rem start "" /min "!bcompareExe!" "gitBatch"
+	rem 2024.10.06 參考開啟eclipse方式，確保開啟順序且不會中途卡住 
+	rem 2024.10.06 增加batch 
+	start "" /min "!bcompareExe!" "ALMS" && timeout /t 3 /nobreak>nul
+	start "" /min "!bcompareExe!" "batch" && timeout /t 3 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "gitBatch" && timeout /t 3 /nobreak>nul
 )
 
 rem 開啟chrome 

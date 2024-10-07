@@ -39,15 +39,15 @@ set backupDiscName=disc-c
 call :initialBackupDisc
 
 rem 備份checkDisc 
-rem 113.02.27 更名為CrystalDiskInfo 
+rem 2024.02.27 更名為CrystalDiskInfo 
 set fileName=CrystalDiskInfo
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
-rem 113.02.27 增加備份fakeFlashTest 
+rem 2024.02.27 增加備份fakeFlashTest 
 set fileName=fakeFlashTest
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
-rem 113.02.27 增加備份h2testw 
+rem 2024.02.27 增加備份h2testw 
 set fileName=h2testw
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
@@ -71,6 +71,10 @@ call :initialBackupDisc
 
 rem 備份apache-tomcat-9.0.46 
 set fileName=apache-tomcat-9.0.46
+call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
+
+rem 2024.10.06 增加備份batch 
+set fileName=batch
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份Beyond Compare 4 
@@ -180,7 +184,7 @@ if not exist "%backupBackupPath%" (
 	mkdir "%backupBackupPath%"
 )
 rem backupPath中有backupBackup就丟到backupBackupPath中 
-rem 113.10.02 修正不管有沒有找到都會丟到backupBackupPath中的問題 
+rem 2024.10.02 修正不管有沒有找到都會丟到backupBackupPath中的問題 
 dir /b "%backupPath%" | findstr "%backupBackup%">nul && move /y "%backupPath%\*.*" "%backupBackupPath%">nul
 goto :eof
 
@@ -193,7 +197,7 @@ if "%otherBackupRoot%" equ "" (
 	if not exist "%otherBackupRoot%" (
 		mkdir "%otherBackupRoot%">nul
 	)
-	rem 113.03.03 改用robocopy增加效率 
+	rem 2024.03.03 改用robocopy增加效率 
 	robocopy /mir /mt:32 "%backupRoot%" "%otherBackupRoot%">nul
 )
 set otherBackupRoot=

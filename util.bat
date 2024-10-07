@@ -6,7 +6,7 @@ set sqlServerBackupRoot=D:\DB\sqlServer2019\Backup
 set mySqlBackupRoot=D:\DB\mySql8\Backup
 
 set action=%~1
-rem 113.07.07 增加移動檔案 
+rem 2024.07.07 增加移動檔案 
 if "%action%" equ "moveFile" (
 	set destPath=%~2
 	set filePath=%~3
@@ -27,7 +27,7 @@ if "%action%" equ "moveFile" (
 	set mySqlInfo=%~2
 	set mySqlDbName=%~3
 	call :backupMySql
-rem 113.07.07 將backup.bat的檢查是否插入隨身碟放到這邊 
+rem 2024.07.07 將backup.bat的檢查是否插入隨身碟放到這邊 
 ) else if "%action%" equ "checkIsHasUsb" (
 	set usbDisc=%~2
 	call :checkIsHasUsb

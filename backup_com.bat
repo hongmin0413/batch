@@ -20,7 +20,7 @@ if not exist "%backupRoot%" (
 )
 
 rem 備份農業部 
-rem 113.07.23 增加備份MOADoms2501 
+rem 2024.07.23 增加備份MOADoms2501 
 set orgName=農業部 
 set programName=workspace_MOA_COA
 set serverName=wildfly-21.0.0.Final_COA
@@ -67,6 +67,13 @@ set orgName=經濟部
 set programName=workspace_MOA_MOEA
 set serverName=wildfly-21.0.0.Final_MOEA
 set dbName=signdomsMOEANew、signdomsAOC
+call :backup
+
+rem 2024.10.07 增加備份個資處 
+set orgName=個資處 
+set programName=workspace_PDPC
+set serverName=wildfly-21.0.0.Final_PDPC
+set dbName=signdomsPDPC
 call :backup
 
 rem 備份經濟部OA 
