@@ -16,9 +16,10 @@ rem 開啟eclipse
 if %isOpenEclipse% equ true (
 	rem 2024.08.22 調整為直接call另一個資料夾寫好的bat 
 	set openEclipseBatDir="D:\workspace\開啟程式編輯器"
-	if exist %openEclipseBatDir% (
+	if exist !openEclipseBatDir! (
 		rem 2024.09.16 直接進到資料夾call，因為bat的內容是用相對路徑執行的 
-		cd %openEclipseBatDir%
+		rem 2024.10.15 修正參數使用錯誤的問題 
+		cd !openEclipseBatDir!
 		call "農業部.bat" && timeout /t 10 /nobreak>nul
 		call "智慧局.bat" && timeout /t 10 /nobreak>nul
 		rem call "智慧局_111增修.bat" && timeout /t 10 /nobreak>nul
