@@ -15,14 +15,15 @@ setlocal enabledelayedexpansion
 
 rem 開啟eclipse 
 if %isOpenEclipse% equ true (
-    set eclipseExe=C:\Users\User\eclipse\jee-2021-12\eclipse\eclipse.exe
-    start "" /min "!eclipseExe!" -data "D:\eclipse-workspace_JavaWeb" && timeout /t 10 /nobreak>nul
+	set eclipseExe=C:\Users\User\eclipse\jee-2021-12\eclipse\eclipse.exe
+	start "" /min "!eclipseExe!" -data "D:\eclipse-workspace_JavaWeb" && timeout /t 10 /nobreak>nul
 )
 
 rem 開啟vs code 
 if %isOpenVsCode% equ true (
-    set vsCodeExe=C:\Users\User\AppData\Local\Programs\Microsoft VS Code\Code.exe
-	start "" /min "!vsCodeExe!" "D:\eclipse-workspace_JavaWeb\ALMS_new"
+	set vsCodeExe=C:\Users\User\AppData\Local\Programs\Microsoft VS Code\Code.exe
+	rem 2024.10.19 ALMS_new -> ALMS 
+	start "" /min "!vsCodeExe!" "D:\eclipse-workspace_JavaWeb\ALMS"
 )
 
 rem 開啟Q-dir 
