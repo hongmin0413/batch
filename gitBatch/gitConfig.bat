@@ -1,10 +1,10 @@
 @echo off
 chcp 65001>nul
 
-rem 讀取config.ini並設為參數
+rem 讀取config.ini並設為參數 
 for /f "delims=" %%i in ('type "config.ini"^| find /i "="') do set %%i
 
-rem 更新username(與原先不同才更新)
+rem 更新username(與原先不同才更新) 
 :reviseUsername
 for /f "delims=" %%i in ('git config --global user.name^| findstr /r "[^%username%]"') do (
 	git config --global user.name "%username%"
@@ -18,7 +18,7 @@ for /f "delims=" %%i in ('git config --global user.name^| findstr /r "[^%usernam
 )
 echo git的使用者名稱已為%username%，不更新
 
-rem 更新useremail(與原先不同才更新)
+rem 更新useremail(與原先不同才更新) 
 :reviseUseremail
 for /f "delims=" %%i in ('git config --global user.email^| findstr /r "[^%useremail%]"') do (
 	git config --global user.email %useremail%
@@ -32,20 +32,35 @@ for /f "delims=" %%i in ('git config --global user.email^| findstr /r "[^%userem
 )
 echo git的使用者信箱已為%useremail%，不更新
 
-rem 修改safecrlf，避免出現LF would be replaced by CRLF(不是false才更新)
+rem 修改safecrlf，避免出現LF would be replaced by CRLF(不是false才更新) 
 :reviseSafecrlf
 set safecrlf=false
 for /f "delims=" %%i in ('git config --global core.safecrlf^| findstr /r "[^%safecrlf%]"') do (
 	git config --global core.safecrlf %safecrlf%
 	if %errorlevel% equ 0 (
 		echo 修改git的safecrlf為%safecrlf%成功
-		goto reviseSuccess
+		goto reviseIgnorecase
 	)else (
 		echo 修改git的safecrlf為%safecrlf%失敗，請按任意鍵退出...
 		goto pauseAndExit
 	)
 )
 echo git的safecrlf已為%safecrlf%，不更新
+
+rem 修改ignorecase，避免檔案或資料夾名稱沒更新到(不是false才更新) 
+:reviseIgnorecase
+set ignorecase=false
+for /f "delims=" %%i in ('git config --global core.ignorecase^| findstr /r "[^%ignorecase%]"') do (
+	git config --global core.ignorecase %ignorecase%
+	if %errorlevel% equ 0 (
+		echo 更新git的ignorecase為%ignorecase%成功
+		goto reviseSuccess
+	)else (
+		echo 更新git的ignorecase為%ignorecase%失敗，請按任意鍵退出...
+		goto pauseAndExit
+	)
+)
+echo git的ignorecase已為%ignorecase%，不更新
 
 :reviseSuccess
 echo 請按任意鍵退出...
