@@ -118,12 +118,9 @@ rem 備份incomeTax
 set fileName=incomeTax
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
-rem 備份jaspersoftstudio 
-set fileName=jaspersoftstudio
-call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
-
-rem 備份JaspersoftWorkspace 
-set fileName=JaspersoftWorkspace
+rem 備份jaspersoft 
+rem 2024.11.21 將studio及workspace放在一起成jaspersoft 
+set fileName=jaspersoft
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份Java 
