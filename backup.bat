@@ -62,6 +62,10 @@ call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem 備份javaWeb_setting 
 set fileName=javaWeb_setting
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
+
+rem 2025.01.20 增加備份cursorSetting 
+set fileName=cursorSetting
+call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem ==============================以上為C槽的檔案===================================== 
 rem ==============================以下為D槽的檔案===================================== 
 :disc_d
@@ -69,8 +73,12 @@ set fileDisc=D:
 set backupDiscName=disc-d
 call :initialBackupDisc
 
-rem 備份apache-tomcat-9.0.46 
-set fileName=apache-tomcat-9.0.46
+rem 2025.01.19 增加備份apache-maven 
+set fileName=apache-maven
+call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
+
+rem 2025.01.19 增加備份apache-tomcat(將所有tomcat整合在一起) 
+set fileName=apache-tomcat 
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2024.10.06 增加備份batch 
@@ -125,6 +133,10 @@ call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份Java 
 set fileName=Java
+call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
+
+rem 2025.01.19 增加備份javaWebWorkspace 
+set fileName=javaWebWorkspace
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份pokemon 

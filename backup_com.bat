@@ -83,6 +83,13 @@ set serverName=wildfly-28.0.1.Final_moeaoa
 set dbName=moeaoa
 call :backup
 
+rem 2025.02.07 增加備份衛福部OA 
+set orgName=衛福部OA 
+set programName=workspace_OASystem_JDK21
+set serverName=wildfly-34.0.0.Final_MOHW_OA
+set dbName=moeaMOHW
+call :backup
+
 set msg=備份完畢 
 if exist "%msgExe%" (
 	"%msgExe%" ^* "%msg%"

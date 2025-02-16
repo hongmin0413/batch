@@ -20,6 +20,7 @@ if %isOpenEclipse% equ true (
 		rem 2024.09.16 直接進到資料夾call，因為bat的內容是用相對路徑執行的 
 		rem 2024.10.15 修正參數使用錯誤的問題 
 		rem 2024.12.16 修正無法切換到d槽的問題 
+		rem 2025.02.07 增加機關 
 		cd /d "!openEclipseBatDir!"
 		call "農業部.bat" && timeout /t 10 /nobreak>nul
 		call "智慧局.bat" && timeout /t 10 /nobreak>nul
@@ -30,6 +31,7 @@ if %isOpenEclipse% equ true (
 		call "經濟部.bat" && timeout /t 10 /nobreak>nul
 		rem call "個資處.bat" && timeout /t 10 /nobreak>nul
 		rem call "經濟部OA.bat" && timeout /t 10 /nobreak>nul
+		rem call "衛福部OA.bat" && timeout /t 10 /nobreak>nul
 		cd "%~dp0"
 	)
 )
@@ -45,6 +47,7 @@ if %isOpenBcompare% equ true (
 	rem 先讀取程式設定檔的config.ini 
 	rem 2024.05.15 調整程式設定檔config.ini的路徑 
 	rem 2024.07.23 參考開啟eclipse方式，確保開啟順序且不會中途卡住 
+	rem 2025.02.07 增加機關 
 	for /f "delims=" %%i in ('type "C:\Project\JavaProject\更新機關設定檔指令\config.ini"^| find /i "="') do set %%i
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_農業部" && timeout /t 3 /nobreak>nul
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_智慧局" && timeout /t 3 /nobreak>nul
@@ -55,8 +58,10 @@ if %isOpenBcompare% equ true (
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_經濟部" && timeout /t 3 /nobreak>nul
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_個資處" && timeout /t 3 /nobreak>nul
 	start "" /min "!bcompareExe!" "OASystemEE <--> workspace_經濟部OA" && timeout /t 3 /nobreak>nul
+	start "" /min "!bcompareExe!" "OASystemEE <--> workspace_衛福部OA" && timeout /t 3 /nobreak>nul
 	start "" /min "!bcompareExe!" "!currentOrgName!\MOADoms_settings" && timeout /t 3 /nobreak>nul
 	rem start "" /min "!bcompareExe!" "經濟部OA\OASystem_settings" && timeout /t 3 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "衛福部OA\OASystem_settings" && timeout /t 3 /nobreak>nul
 )
 
 rem 開啟chrome 
