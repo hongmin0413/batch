@@ -17,6 +17,8 @@ if %isOpenCursor% equ true (
 	set cursorExe=C:\Users\User\AppData\Local\Programs\cursor\Cursor.exe
 	rem 2024.10.19 ALMS_new -> ALMS 
 	rem 2025.01.18 更換目錄 
+	rem 2025.04.01 不知道為什麼把VSCODE_DEV清空才不會有錯誤 
+	set VSCODE_DEV=
 	start "" /min "!cursorExe!" "D:\javaWebWorkspace\ALMS"
 )
 
