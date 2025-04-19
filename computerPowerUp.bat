@@ -33,8 +33,11 @@ if %isOpenBcompare% equ true (
 	rem 2024.10.06 參考開啟eclipse方式，確保開啟順序且不會中途卡住 
 	rem 2024.10.06 增加batch 
 	rem 2025.01.18 更換ALMS目錄 
+	rem 2025.04.20 增加cursorSetting 
 	start "" /min "!bcompareExe!" "github <--> localhost_ALMS" && timeout /t 3 /nobreak>nul
 	rem start "" /min "!bcompareExe!" "company <--> localhost_ALMS" && timeout /t 3 /nobreak>nul
+	start "" /min "!bcompareExe!" "cursor <--> localhost_cursorSetting" && timeout /t 3 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "company <--> localhost_cursorSetting" && timeout /t 3 /nobreak>nul
 	start "" /min "!bcompareExe!" "batch" && timeout /t 3 /nobreak>nul
 	rem start "" /min "!bcompareExe!" "gitBatch" && timeout /t 3 /nobreak>nul
 )

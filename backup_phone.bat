@@ -17,19 +17,19 @@ if not exist "%backupRoot%" (
 
 rem 備份文件 
 set fileName=文件
-call util.bat "moveFile" "%backupRoot%" "%phoneFile%" "%fileName%"
+call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
 
 rem 備份写真 
 set fileName=写真
-call util.bat "moveFile" "%backupRoot%" "%phoneFile%" "%fileName%"
+call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
 
 rem 備份映画 
 set fileName=映画
-call util.bat "moveFile" "%backupRoot%" "%phoneFile%" "%fileName%"
+call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
 
 rem 備份音樂 
 set fileName=音樂
-call util.bat "moveFile" "%backupRoot%" "%phoneFile%" "%fileName%"
+call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
 
 set msg=備份完畢 
 if exist "%msgExe%" (

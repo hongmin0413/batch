@@ -6,12 +6,12 @@ set sqlServerBackupRoot=D:\DB\sqlServer2019\Backup
 set mySqlBackupRoot=D:\DB\mySql8\Backup
 
 set action=%~1
-rem 2024.07.07 增加移動檔案 
-if "%action%" equ "moveFile" (
+rem 2024.07.07 增加複製檔案 
+if "%action%" equ "copyFile" (
 	set destPath=%~2
 	set filePath=%~3
 	set fileName=%~4
-	call :moveFile
+	call :copyFile
 )else if "%action%" equ "zipFile" (
 	set zipPath=%~2
 	set fileDisc=%~3
@@ -34,20 +34,20 @@ rem 2024.07.07 將backup.bat的檢查是否插入隨身碟放到這邊
 )
 goto :eof
 
-rem 移動檔案 
-:moveFile
+rem 複製檔案 
+:copyFile
 setlocal enabledelayedexpansion
-rem fileName有值才移動 
+rem fileName有值才複製 
 if "%fileName%" neq "" (
 	echo ================================================================================
-	rem 要移動的file存在才移動 
+	rem 要複製的file存在才複製 
 	set file=%filePath%\%fileName%
 	if exist "!file!" (
-		echo 開始移動【!file!】... 
+		echo 開始複製【!file!】... 
 		robocopy /mir /mt:32 "!file!" "%destPath%\%fileName%">nul 
-		echo 【!file!】移動完畢
+		echo 【!file!】複製完畢
 	)else (
-		echo 【!file!】不存在，不移動
+		echo 【!file!】不存在，不複製
 	)
 )
 endlocal
