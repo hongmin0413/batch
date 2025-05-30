@@ -5,7 +5,7 @@ rem 是否開啟應用程式的布林值
 set isOpenCursor=true
 set isOpenQ-dir=true
 set isOpenBcompare=true
-set isOpenChrome=true
+set isOpenChrome=false
 set isOpenEdge=true
 set isOpenNotepad=true
 set isOpenTaskManager=true
@@ -17,8 +17,6 @@ if %isOpenCursor% equ true (
 	set cursorExe=C:\Users\User\AppData\Local\Programs\cursor\Cursor.exe
 	rem 2024.10.19 ALMS_new -> ALMS 
 	rem 2025.01.18 更換目錄 
-	rem 2025.04.01 不知道為什麼把VSCODE_DEV清空才不會有錯誤 
-	set VSCODE_DEV=
 	start "" /min "!cursorExe!" "D:\javaWebWorkspace\ALMS"
 )
 

@@ -84,10 +84,11 @@ set dbName=moeaoa
 call :backup
 
 rem 2025.02.07 增加備份衛福部OA 
+rem 2025.05.27 調整資料庫名稱 
 set orgName=衛福部OA 
 set programName=workspace_OASystem_JDK21
 set serverName=wildfly-34.0.0.Final_MOHW_OA
-set dbName=moeaMOHW
+set dbName=moeaoaMOHW
 call :backup
 
 set msg=備份完畢 
