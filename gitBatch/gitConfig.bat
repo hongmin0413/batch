@@ -5,66 +5,47 @@ rem 讀取config.ini並設為參數
 for /f "delims=" %%i in ('type "config.ini"^| find /i "="') do set %%i
 
 rem 更新username(與原先不同才更新) 
-:reviseUsername
-for /f "delims=" %%i in ('git config --global user.name^| findstr /r "[^%username%]"') do (
-	git config --global user.name "%username%"
-	if %errorlevel% equ 0 (
-		echo 更新git的使用者名稱為%username%成功
-		goto reviseUseremail
-	)else (
-		echo 更新git的使用者名稱為%username%失敗，請按任意鍵退出...
-		goto pauseAndExit
-	)
-)
-echo git的使用者名稱已為%username%，不更新
+set configName=使用者名稱
+set configNameForSet=user.name
+set reviseValue=%username%
+call :reviseConfig
 
 rem 更新useremail(與原先不同才更新) 
-:reviseUseremail
-for /f "delims=" %%i in ('git config --global user.email^| findstr /r "[^%useremail%]"') do (
-	git config --global user.email %useremail%
-	if %errorlevel% equ 0 (
-		echo 更新git的使用者信箱為%useremail%成功
-		goto reviseSafecrlf
-	)else (
-		echo 更新git的使用者信箱為%useremail%失敗，請按任意鍵退出...
-		goto pauseAndExit
-	)
-)
-echo git的使用者信箱已為%useremail%，不更新
+set configName=使用者信箱
+set configNameForSet=user.email
+set reviseValue=%useremail%
+call :reviseConfig
 
 rem 修改safecrlf，避免出現LF would be replaced by CRLF(不是false才更新) 
-:reviseSafecrlf
-set safecrlf=false
-for /f "delims=" %%i in ('git config --global core.safecrlf^| findstr /r "[^%safecrlf%]"') do (
-	git config --global core.safecrlf %safecrlf%
-	if %errorlevel% equ 0 (
-		echo 修改git的safecrlf為%safecrlf%成功
-		goto reviseIgnorecase
-	)else (
-		echo 修改git的safecrlf為%safecrlf%失敗，請按任意鍵退出...
-		goto pauseAndExit
-	)
-)
-echo git的safecrlf已為%safecrlf%，不更新
+set configName=safecrlf
+set configNameForSet=core.safecrlf
+set reviseValue=false
+call :reviseConfig
 
 rem 修改ignorecase，避免檔案或資料夾名稱沒更新到(不是false才更新) 
-:reviseIgnorecase
-set ignorecase=false
-for /f "delims=" %%i in ('git config --global core.ignorecase^| findstr /r "[^%ignorecase%]"') do (
-	git config --global core.ignorecase %ignorecase%
-	if %errorlevel% equ 0 (
-		echo 更新git的ignorecase為%ignorecase%成功
-		goto reviseSuccess
-	)else (
-		echo 更新git的ignorecase為%ignorecase%失敗，請按任意鍵退出...
-		goto pauseAndExit
-	)
-)
-echo git的ignorecase已為%ignorecase%，不更新
+set configName=ignorecase
+set configNameForSet=core.ignorecase
+set reviseValue=false
+call :reviseConfig
 
-:reviseSuccess
 echo 請按任意鍵退出...
 goto pauseAndExit
+
+:reviseConfig
+for /f "delims=" %%i in ('git config --global %configNameForSet%') do set configValue=%%i
+if "%configValue%" neq "%reviseValue%" (
+	git config --global %configNameForSet% %reviseValue%
+	if %errorlevel% equ 0 (
+		echo 更新git的%configName%為%reviseValue%成功
+		goto :eof
+	)else (
+		echo 更新git的%configName%為%reviseValue%失敗，請按任意鍵退出...
+		goto pauseAndExit
+	)
+)else (
+	echo git的%configName%已為%reviseValue%，不更新
+	goto :eof
+)
 
 :pauseAndExit
 pause>nul

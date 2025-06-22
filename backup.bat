@@ -4,12 +4,11 @@ chcp 65001>nul
 set msgExe=%~dp0%\msg.exe
 
 rem 若不備份某一路徑，直接註解即可 
+rem 2025.06.19 以後不再備份到F槽 
 set backupRoot=C:\backup
 set otherBackupRoot1=D:\backup
-set usbBackupDisc1=E:
-set otherBackupRoot2=%usbBackupDisc1%\backup_computer
-set usbBackupDisc2=F:
-set otherBackupRoot3=%usbBackupDisc2%\backup_computer
+set usbBackupDisc=E:
+set otherBackupRoot2=%usbBackupDisc%\backup_computer
 set backupBackup=history
 rem 讀取config.ini並設為參數
 for /f "delims=" %%i in ('type "config.ini"^| find /i "="') do set %%i
@@ -24,19 +23,25 @@ if not exist "%backupRoot%" (
 )
 rem ==============================以下為桌面的檔案===================================== 
 :disc_desktop
-set fileDisc=C:\Users\User\OneDrive\桌面
-set backupDiscName=disc-desktop
-call :initialBackupDisc
-
-rem 備份program 
-set fileName=program
-call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2025.06.20 調整桌面路徑 
+rem 2025.06.22 將檔案放到C:\computer_setting，因此不再備份 
+rem set fileDisc=C:\Users\Henry\Desktop
+rem set backupDiscName=disc-desktop
+rem call :initialBackupDisc
 rem ==============================以上為桌面的檔案===================================== 
 rem ==============================以下為C槽的檔案===================================== 
 :disc_c
 set fileDisc=C:
 set backupDiscName=disc-c
 call :initialBackupDisc
+
+rem 2025.06.20 增加備份backupPhoneAndCloud_backup，用來存結構，換筆電後要複製一份並拿掉"_backup" 
+set fileName=backupPhoneAndCloud_backup
+call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
+
+rem 2025.06.22 增加備份computer_setting 
+set fileName=computer_setting
+call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份checkDisc 
 rem 2024.02.27 更名為CrystalDiskInfo 
@@ -78,7 +83,8 @@ set fileName=apache-maven
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2025.01.19 增加備份apache-tomcat(將所有tomcat整合在一起) 
-set fileName=apache-tomcat 
+rem 2025.06.19 修正備份失敗的問題 
+set fileName=apache-tomcat
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2024.10.06 增加備份batch 
@@ -162,14 +168,8 @@ call :copyToOtherBakupRoot
 
 echo 開始備份到%otherBackupRoot2%中... 
 rem 先檢查是否插入隨身碟 
-call util.bat "checkIsHasUsb" "%usbBackupDisc1%"
+call util.bat "checkIsHasUsb" "%usbBackupDisc%"
 set otherBackupRoot=%otherBackupRoot2%
-call :copyToOtherBakupRoot
-
-echo 開始備份到%otherBackupRoot3%中... 
-rem 先檢查是否插入隨身碟 
-call util.bat "checkIsHasUsb" "%usbBackupDisc2%"
-set otherBackupRoot=%otherBackupRoot3%
 call :copyToOtherBakupRoot
 echo ================================================================================ 
 set msg=備份完畢 

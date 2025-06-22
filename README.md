@@ -13,8 +13,8 @@
 
 * backup.bat：
 	* 備份重要資料至C槽、D槽、隨身碟中
-	* 7-Zip程式位置不同時，zipExe要更新
-	* 備份位置不同時，backupRoot、otherBackupRoot1、otherBackupRoot2、otherBackupRoot3、backupBackup、sqlServerBackupRoot、mySqlBackupRoot要更新
+	* 檢查util.bat的zipExe、sqlServerBackupRoot、mySqlBackupRoot是否需要修改
+	* 備份位置不同時，backupRoot、otherBackupRoot1、otherBackupRoot2、backupBackup要更新
 	* file位置不同時，fileDisc、fileName要更新
 	* db移除或離線時，sqlServerInfo、sqlServerDbName、mySqlInfo、mySqlDbName要更新
 	* 確認config.ini的值是否正確
@@ -23,6 +23,7 @@
 
 * backup_cloud.bat：
 	* 備份雲端重要資料至隨身碟中
+	* 檢查util.bat的zipExe是否需要修改
 	* 備份位置不同時，backupRoot要更新
 	* file位置不同時，cloudFile、fileName要更新
 	* 雲端名稱不同時，cloudName要更新
@@ -39,6 +40,7 @@
 
 * backup_phone.bat：
 	* 備份手機重要資料至隨身碟中
+	* 檢查util.bat的zipExe是否需要修改
 	* 備份位置不同時，backupRoot要更新
 	* file位置不同時，phoneFile、fileName要更新
 	* 先將手機資料移動至phoneFile中，再點擊此bat檔
@@ -79,6 +81,7 @@
 	
 * util.bat：
 	* bat功能大集合
+	* 7-Zip程式位置不同時，zipExe要更新
 	* call util.bat "moveFile" "%destPath%" "%filePath%" "%fileName%"
 	* call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 	* call util.bat "backupSqlServer" "%sqlServerInfo%" "%sqlServerDbName%"

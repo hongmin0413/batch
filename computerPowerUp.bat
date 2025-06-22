@@ -14,10 +14,11 @@ setlocal enabledelayedexpansion
 
 rem 開啟cursor 
 if %isOpenCursor% equ true (
-	set cursorExe=C:\Users\User\AppData\Local\Programs\cursor\Cursor.exe
+	rem 2025.06.20 調整開啟寫法，避免每次都拋錯 
+	set cursorCmd=C:\Users\Henry\AppData\Local\Programs\cursor\resources\app\bin\cursor.cmd
 	rem 2024.10.19 ALMS_new -> ALMS 
 	rem 2025.01.18 更換目錄 
-	start "" /min "!cursorExe!" "D:\javaWebWorkspace\ALMS"
+	call "!cursorCmd!" "D:\javaWebWorkspace\ALMS"
 )
 
 rem 開啟Q-dir 

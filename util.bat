@@ -2,7 +2,7 @@
 chcp 65001>nul
 
 set zipExe=C:\Program Files\7-Zip\7z.exe
-set sqlServerBackupRoot=D:\DB\sqlServer2019\Backup
+set sqlServerBackupRoot=D:\DB\sqlServer2022\Backup
 set mySqlBackupRoot=D:\DB\mySql8\Backup
 
 set action=%~1
