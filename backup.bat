@@ -160,6 +160,10 @@ call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem 備份Q-Dir 
 set fileName=Q-Dir
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
+
+rem 114.07.07 增加備份VirtuaWin_portable_4.5 
+set fileName=VirtuaWin_portable_4.5
+call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem ==============================以上為D槽的檔案===================================== 
 echo ================================================================================ 
 echo 開始備份到%otherBackupRoot1%中... 

@@ -9,6 +9,7 @@ set isOpenChrome=false
 set isOpenEdge=true
 set isOpenNotepad=true
 set isOpenTaskManager=true
+set isOpenVirtuaWin=true
 
 setlocal enabledelayedexpansion
 
@@ -59,6 +60,11 @@ if %isOpenNotepad% equ true (
 rem 開啟工作管理員 
 if %isOpenTaskManager% equ true (
 	taskmgr
+)
+
+rem 開啟virtuaWin 
+if %isOpenVirtuaWin% equ true (
+	start "" /min "D:\VirtuaWin_portable_4.5\VirtuaWin.exe"
 )
 
 endlocal
