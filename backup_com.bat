@@ -10,7 +10,7 @@ set programRoot=D:\workspace
 set serverRoot=D:\APPS
 set dbBackupRoot=D:\DB\SQL2019\Backup
 
-echo 即將備份program、server、DB，若要完整備份，請先關閉eclipse及結束server 
+echo 即將備份program、server、DB、其它資料夾，若要完整備份，請先關閉eclipse及結束server 
 echo 請按任意鍵繼續... 
 pause>nul
 
@@ -90,6 +90,11 @@ set programName=workspace_OASystem_JDK21
 set serverName=wildfly-34.0.0.Final_MOHW_OA
 set dbName=moeaoaMOHW
 call :backup
+
+rem 2025.09.30 增加備份Q-dir資料 
+set copyFilePath=D:\Tools\BC
+set copyFileName=Q-Dir
+call :copyFile
 
 set msg=備份完畢 
 if exist "%msgExe%" (
@@ -198,4 +203,26 @@ set orgName=
 set programName=
 set serverName=
 set dbName=
+goto :eof
+
+rem 複製檔案 
+:copyFile
+setlocal enabledelayedexpansion
+rem fileName有值才複製 
+if "%copyFileName%" neq "" (
+	echo ================================================================================
+	rem 要複製的file存在才複製 
+	set file=%copyFilePath%\%copyFileName%
+	if exist "!file!" (
+		echo 開始複製【!file!】... 
+		robocopy /mir /mt:32 "!file!" "%backupRoot%\%copyFileName%">nul 
+		echo 【!file!】複製完畢
+	)else (
+		echo 【!file!】不存在，不複製
+	)
+)
+endlocal
+rem 清空參數後返回
+set copyFilePath=
+set copyFileName=
 goto :eof
