@@ -30,13 +30,14 @@
 	* 先將雲端資料移動至cloudFile中，再點擊此bat檔
 
 * backup_com.bat`(公司用)`：
-	* 備份program、server、DB
+	* 備份重要資料至C槽
 	* 7-Zip程式位置不同時，zipExe要更新
 	* 備份位置不同時，backupRoot、backupBackup、dbBackupRoot要更新
 	* program位置不同時，programRoot、programName要更新
 	* server位置不同時，serverRoot、serverName要更新
 	* db移除或離線時，dbName要更新
 	* 排程：每月最後一天的的18:00執行，錯過後會盡快執行
+	* `備份重要資料_com.xml`
 
 * backup_phone.bat：
 	* 備份手機重要資料至隨身碟中
@@ -59,6 +60,7 @@
 	* 本機排程：每天每10分鐘背景執行
 	* 公司排程：平日09:00-19:00，每10分鐘背景執行
 	* `提醒筆電充電狀態.xml`
+	* `提醒筆電充電狀態_com.xml`
 	
 * computerPowerUp.bat：
 	* 筆電開機後要先開啟的應用程式
@@ -72,12 +74,14 @@
 	* 應用程式位置不同時，相關exe要更新
 	* 應用程式預設開啟的專案不同時，相關專案名稱要更新
 	* 排程：登入時(筆電剛開機登入時)延後1分鐘背景執行
+	* `筆電開機後要先開啟的應用程式_com.xml`
 
 * svnUpdate_com.bat`(公司用)`：
 	* 更新SVN
 	* SVN程式位置不同時，svnExe要更新
 	* 要更新的資料夾位置不同時，updateRootFile要更新
 	* 排程：平日09:00、14:30執行，錯過後會盡快執行
+	* `更新SVN_com.xml`
 	
 * util.bat：
 	* bat功能大集合

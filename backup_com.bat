@@ -7,8 +7,9 @@ set zipExe=C:\Program Files\7-Zip\7z.exe
 set backupRoot=C:\backup
 set backupBackup=history
 set programRoot=D:\workspace
-set serverRoot=D:\APPS
-set dbBackupRoot=D:\DB\SQL2019\Backup
+rem 2025.10.21 調整路徑 
+set serverRoot=D:\APPS\wildfly
+set dbBackupRoot=D:\DB\SQL2022\Backup
 
 echo 即將備份program、server、DB、其它資料夾，若要完整備份，請先關閉eclipse及結束server 
 echo 請按任意鍵繼續... 
@@ -23,7 +24,7 @@ rem 備份農業部
 rem 2024.07.23 增加備份MOADoms2501 
 set orgName=農業部 
 set programName=workspace_MOA_COA
-set serverName=wildfly-21.0.0.Final_COA
+set serverName=wildfly-21.0.0.Final_MOA
 set dbName=MOADoms00、MOADoms25、eipdb、MOADoms2501
 call :backup
 
@@ -44,21 +45,21 @@ call :backup
 rem 備份國發會 
 set orgName=國發會 
 set programName=workspace_MOA_CI
-set serverName=wildfly-10.0.0.Final_CI
+set serverName=wildfly-10.0.0.Final_NDC
 set dbName=signdoms27
 call :backup
 
 rem 備份國發會_111增修 
 set orgName=國發會_111增修 
 set programName=workspace_MOA_CI
-rem set serverName=wildfly-10.0.0.Final_CI(與國發會同，不備份) 
+rem set serverName=wildfly-10.0.0.Final_NDC(與國發會同，不備份) 
 rem set dbName=signdoms27(與國發會同，不備份) 
 call :backup
 
 rem 備份農險基金 
 set orgName=農險基金 
 set programName=workspace_MOA_農保基金
-set serverName=wildfly-20.0.1.Final_農水署
+set serverName=wildfly-20.0.1.Final_農險基金
 set dbName=signdoms32
 call :backup
 
@@ -79,7 +80,7 @@ call :backup
 rem 備份經濟部OA 
 set orgName=經濟部OA 
 set programName=workspace_OASystem_JDK17
-set serverName=wildfly-28.0.1.Final_moeaoa
+set serverName=wildfly-28.0.1.Final_MOEA_OA
 set dbName=moeaoa
 call :backup
 
@@ -89,6 +90,13 @@ set orgName=衛福部OA
 set programName=workspace_OASystem_JDK21
 set serverName=wildfly-34.0.0.Final_MOHW_OA
 set dbName=moeaoaMOHW
+call :backup
+
+rem 2025.10.21 增加備份經濟部EM 
+set orgName=經濟部EM 
+set programName=workspace_EMSystem
+set serverName=wildfly-37.0.1.Final_MOEA_EM
+set dbName=moeaem
 call :backup
 
 rem 2025.09.30 增加備份Q-dir資料 
