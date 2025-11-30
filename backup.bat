@@ -100,12 +100,13 @@ set fileName=C#Workspace
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份DB(先備份資料庫，再備份資料) 
+rem 2025.11.30 mysql-library不再備份 
 set sqlServerInfo=%sqlServerInfo1%
 set sqlServerDbName=ALMS、ATM
 call util.bat "backupSqlServer" "%sqlServerInfo%" "%sqlServerDbName%"
 set mySqlInfo=%mySqlInfo1%
-set mySqlDbName=library
-call util.bat "backupMySql" "%mySqlInfo%" "%mySqlDbName%"
+rem set mySqlDbName=library 
+rem call util.bat "backupMySql" "%mySqlInfo%" "%mySqlDbName%" 
 set mySqlInfo=%mySqlInfo2%
 set mySqlDbName=xo219rlloiny8yk8
 call util.bat "backupMySql" "%mySqlInfo%" "%mySqlDbName%"
@@ -137,8 +138,8 @@ rem 2024.11.21 將studio及workspace放在一起成jaspersoft
 set fileName=jaspersoft
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
-rem 備份Java 
-set fileName=Java
+rem 備份java 
+set fileName=java
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2025.01.19 增加備份javaWebWorkspace 
