@@ -25,7 +25,7 @@ rem ==============================以下為桌面的檔案======================
 :disc_desktop
 rem 2025.06.20 調整桌面路徑 
 rem 2025.06.22 將檔案放到C:\computer_setting，因此不再備份 
-rem set fileDisc=C:\Users\Henry\Desktop
+rem set fileDisc=%USERPROFILE%\Desktop
 rem set backupDiscName=disc-desktop
 rem call :initialBackupDisc
 rem ==============================以上為桌面的檔案===================================== 
@@ -166,6 +166,20 @@ rem 114.07.07 增加備份VirtuaWin_portable_4.5
 set fileName=VirtuaWin_portable_4.5
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem ==============================以上為D槽的檔案===================================== 
+rem ==============================以下為其它檔案====================================== 
+:disc_other
+rem 2026.01.31 增加備份其它資料夾 
+set backupDiscName=disc-other
+call :initialBackupDisc
+
+rem 2026.01.31 增加備份line設定檔 
+set fileName=LINE
+call util.bat "zipFile" "%backupPath%" "%LOCALAPPDATA%" "%fileName%"
+
+rem 2026.01.31 增加備份notepad++設定檔 
+set fileName=Notepad++
+call util.bat "zipFile" "%backupPath%" "%APPDATA%" "%fileName%"
+rem ==============================以上為其它檔案====================================== 
 echo ================================================================================ 
 echo 開始備份到%otherBackupRoot1%中... 
 set otherBackupRoot=%otherBackupRoot1%

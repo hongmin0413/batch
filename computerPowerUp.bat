@@ -16,7 +16,7 @@ setlocal enabledelayedexpansion
 rem 開啟cursor 
 if %isOpenCursor% equ true (
 	rem 2025.06.20 調整開啟寫法，避免每次都拋錯 
-	set cursorCmd=C:\Users\Henry\AppData\Local\Programs\cursor\resources\app\bin\cursor.cmd
+	set cursorCmd=%LOCALAPPDATA%\Programs\cursor\resources\app\bin\cursor.cmd
 	rem 2024.10.19 ALMS_new -> ALMS 
 	rem 2025.01.18 更換目錄 
 	call "!cursorCmd!" "D:\javaWebWorkspace\ALMS"
@@ -34,11 +34,12 @@ if %isOpenBcompare% equ true (
 	rem 2024.10.06 增加batch 
 	rem 2025.01.18 更換ALMS目錄 
 	rem 2025.04.20 增加cursorSetting 
+	rem 2026.01.31 更換batch目錄 
 	start "" /min "!bcompareExe!" "github <--> localhost_ALMS" && timeout /t 3 /nobreak>nul
 	rem start "" /min "!bcompareExe!" "company <--> localhost_ALMS" && timeout /t 3 /nobreak>nul
-	start "" /min "!bcompareExe!" "cursor <--> localhost_cursorSetting" && timeout /t 3 /nobreak>nul
+	start "" /min "!bcompareExe!" "github <--> localhost_batch" && timeout /t 3 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "cursor <--> localhost_cursorSetting" && timeout /t 3 /nobreak>nul
 	rem start "" /min "!bcompareExe!" "company <--> localhost_cursorSetting" && timeout /t 3 /nobreak>nul
-	start "" /min "!bcompareExe!" "batch" && timeout /t 3 /nobreak>nul
 	rem start "" /min "!bcompareExe!" "gitBatch" && timeout /t 3 /nobreak>nul
 )
 
