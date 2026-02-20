@@ -35,17 +35,25 @@ set fileDisc=C:
 set backupDiscName=disc-c
 call :initialBackupDisc
 
+rem 2026.02.07 增加備份antigravitySetting 
+set fileName=antigravitySetting
+call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
+
 rem 2025.06.20 增加備份backupPhoneAndCloud_backup，用來存結構，換筆電後要複製一份並拿掉"_backup" 
 set fileName=backupPhoneAndCloud_backup
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
-rem 2025.06.22 增加備份computer_setting 
-set fileName=computer_setting
+rem 2025.06.22 增加備份computerSetting 
+set fileName=computerSetting
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份checkDisc 
 rem 2024.02.27 更名為CrystalDiskInfo 
 set fileName=CrystalDiskInfo
+call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
+
+rem 2025.01.20 增加備份cursorSetting 
+set fileName=cursorSetting
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2024.02.27 增加備份fakeFlashTest 
@@ -64,12 +72,8 @@ rem 備份JavaImage
 set fileName=JavaImage
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
-rem 備份javaWeb_setting 
-set fileName=javaWeb_setting
-call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
-
-rem 2025.01.20 增加備份cursorSetting 
-set fileName=cursorSetting
+rem 備份javaWebSetting 
+set fileName=javaWebSetting
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem ==============================以上為C槽的檔案===================================== 
 rem ==============================以下為D槽的檔案===================================== 
@@ -162,7 +166,7 @@ rem 備份Q-Dir
 set fileName=Q-Dir
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
-rem 114.07.07 增加備份VirtuaWin_portable_4.5 
+rem 2025.07.07 增加備份VirtuaWin_portable_4.5 
 set fileName=VirtuaWin_portable_4.5
 call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem ==============================以上為D槽的檔案===================================== 
