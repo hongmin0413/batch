@@ -20,12 +20,14 @@ set fileName=文件
 call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
 
 rem 備份写真 
-set fileName=写真
+rem 2026.02.23 合併写真、映画為圖集 
+set fileName=圖集
 call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
 
 rem 備份映画 
-set fileName=映画
-call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
+rem 2026.02.23 合併写真、映画為圖集 
+rem set fileName=映画 
+rem call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%" 
 
 rem 備份音樂 
 set fileName=音樂
