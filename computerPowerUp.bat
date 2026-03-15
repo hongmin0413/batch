@@ -2,8 +2,8 @@
 chcp 65001>nul
 
 rem 是否開啟應用程式的布林值 
-set isOpenCursor=false
-set isOpenAntigravity=true
+set isOpenCursor=true
+set isOpenAntigravity=false
 set isOpenQ-dir=true
 set isOpenBcompare=true
 set isOpenChrome=false
@@ -18,10 +18,11 @@ rem 開啟cursor
 if %isOpenCursor% equ true (
 	rem 2025.06.20 調整開啟寫法，避免每次都拋錯 
 	rem 2026.02.07 調整為直接call另一個資料夾寫好的bat 
+	rem 2026.03.15 參考開啟Antigravity，不知道為什麼換成start "" /b cmd /c才開得了 
 	set openCursorDir=D:\githubWorkspace\01_開啟程式編輯器
 	if exist "!openCursorDir!" (
 		cd /d "!openCursorDir!"
-		call "ALMS_cursor.bat" && timeout /t 5 /nobreak>nul
+		start "" /b cmd /c "ALMS_cursor.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
 	)
 )
