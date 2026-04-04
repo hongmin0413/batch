@@ -2,20 +2,27 @@
 chcp 65001>nul
 
 rem 是否開啟應用程式的布林值 
+set isOpenVirtuaWin=true
 set isOpenQ-dir=true
 set isOpenBcompare=true
-set isOpenEclipse=true
+set isOpenEclipse=false
+set isOpenCursor=true
 set isOpenChrome=false
 set isOpenEdge=true
 set isOpenNotepad=true
 set isOpenTaskManager=true
-set isOpenVirtuaWin=true
 
 setlocal enabledelayedexpansion
 
+rem 開啟virtuaWin 
+if %isOpenVirtuaWin% equ true (
+	rem 2026.03.16 參考開啟eclipse方式，確保不會中途卡住 
+	start "" /min "D:\Tools\BC\VirtuaWin_portable_4.5\VirtuaWin.exe" && timeout /t 5 /nobreak>nul
+)
+
 rem 開啟Q-dir 
 if %isOpenQ-dir% equ true (
-	start "" /min "D:\Tools\BC\Q-Dir\Q-Dir.exe" 
+	start "" /min "D:\Tools\BC\Q-Dir\Q-Dir.exe"
 )
 
 rem 開啟bcompare 
@@ -24,10 +31,11 @@ if %isOpenBcompare% equ true (
 	rem 先讀取程式設定檔的config.ini 
 	rem 2024.05.15 調整程式設定檔config.ini的路徑 
 	rem 2024.07.23 參考開啟eclipse方式，確保開啟順序且不會中途卡住 
-	rem 2025.02.07 增加機關 
+	rem 2025.02.07 增加衛福部OA 
 	rem 2025.03.17 增加區分不同系統目前開啟的設定檔 
 	rem 2025.08.19 間隔時間調整為5秒 
-	for /f "delims=" %%i in ('type "C:\Project\JavaProject\更新機關設定檔指令\config.ini"^| find /i "="') do set %%i
+	rem 2025.10.21 增加經濟部EM、增加EMSystem的設定檔 
+	for /f "delims=" %%i in ('type "C:\Project\JavaProject\更新機關設定檔\config.ini"^| find /i "="') do set %%i
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_農業部" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_智慧局" && timeout /t 5 /nobreak>nul
 	rem start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_智慧局_111增修" && timeout /t 5 /nobreak>nul
@@ -38,8 +46,10 @@ if %isOpenBcompare% equ true (
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_個資處" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "OASystemEE <--> workspace_經濟部OA" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "OASystemEE <--> workspace_衛福部OA" && timeout /t 5 /nobreak>nul
+	start "" /min "!bcompareExe!" "EMSystemEE <--> workspace_經濟部EM" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "!currentMOADomsOrgName!\MOADoms_settings" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "!currentOASystemOrgName!\OASystem_settings" && timeout /t 5 /nobreak>nul
+	start "" /min "!bcompareExe!" "!currentEMSystemOrgName!\EMSystem_settings" && timeout /t 5 /nobreak>nul
 )
 
 rem 開啟eclipse 
@@ -51,7 +61,8 @@ if %isOpenEclipse% equ true (
 		rem 2024.09.16 直接進到資料夾call，因為bat的內容是用相對路徑執行的 
 		rem 2024.10.15 修正參數使用錯誤的問題 
 		rem 2024.12.16 修正無法切換到d槽的問題 
-		rem 2025.02.07 增加機關 
+		rem 2025.02.07 增加衛福部OA 
+		rem 2025.10.21 增加經濟部EM 
 		cd /d "!openEclipseBatDir!"
 		rem call "農業部.bat" && timeout /t 10 /nobreak>nul
 		rem call "智慧局.bat" && timeout /t 10 /nobreak>nul
@@ -62,19 +73,42 @@ if %isOpenEclipse% equ true (
 		rem call "經濟部.bat" && timeout /t 10 /nobreak>nul
 		rem call "個資處.bat" && timeout /t 10 /nobreak>nul
 		rem call "經濟部OA.bat" && timeout /t 10 /nobreak>nul
-		call "衛福部OA.bat" && timeout /t 10 /nobreak>nul
+		rem call "衛福部OA.bat" && timeout /t 10 /nobreak>nul
+		rem call "經濟部EM.bat" && timeout /t 10 /nobreak>nul
+		cd "%~dp0"
+	)
+)
+
+rem 開啟cursor 
+rem 2026.01.22 參考開啟eclipse方式 
+if %isOpenCursor% equ true (
+	set openCursorBatDir=D:\workspace\開啟程式編輯器
+	if exist "!openCursorBatDir!" (
+		rem 2026.03.16 不知道為什麼換成start "" /b cmd /c才開得了 
+		cd /d "!openCursorBatDir!"
+		rem start "" /b cmd /c "cursor_農業部.bat" && timeout /t 5 /nobreak>nul
+		start "" /b cmd /c "cursor_智慧局.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_智慧局_111增修.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_國發會.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_國發會_111增修.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_農險基金.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_經濟部.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_個資處.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_經濟部OA.bat" && timeout /t 5 /nobreak>nul
+		start "" /b cmd /c "cursor_衛福部OA.bat" && timeout /t 5 /nobreak>nul
+		start "" /b cmd /c "cursor_經濟部EM.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
 	)
 )
 
 rem 開啟chrome 
 if %isOpenChrome% equ true (
-	start "" /min "C:\Program Files\Google\Chrome\Application\chrome.exe" 
+	start "" /min "C:\Program Files\Google\Chrome\Application\chrome.exe"
 )
 
 rem 開啟edge 
 if %isOpenEdge% equ true (
-	start "" /min "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" 
+	start "" /min "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 )
 
 rem 開啟notepad++ 
@@ -85,11 +119,6 @@ if %isOpenNotepad% equ true (
 rem 開啟工作管理員 
 if %isOpenTaskManager% equ true (
 	taskmgr
-)
-
-rem 開啟virtuaWin 
-if %isOpenVirtuaWin% equ true (
-	start "" /min "D:\Tools\BC\VirtuaWin_portable_4.5\VirtuaWin.exe"
 )
 
 endlocal

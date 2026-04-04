@@ -11,7 +11,7 @@ rem 2025.10.21 調整路徑
 set serverRoot=D:\APPS\wildfly
 set dbBackupRoot=D:\DB\SQL2022\Backup
 
-echo 即將備份program、server、DB、其它資料夾，若要完整備份，請先關閉eclipse及結束server 
+echo 即將備份program、server、DB、其它資料夾，若要完整備份，請先關閉相關應用程式 
 echo 請按任意鍵繼續... 
 pause>nul
 
@@ -43,10 +43,11 @@ rem set dbName=signdoms30new(與智慧局同，不備份)
 call :backup
 
 rem 備份國發會 
+rem 2026.04.02 增加備份VANS_CI 
 set orgName=國發會 
 set programName=workspace_MOA_CI
 set serverName=wildfly-10.0.0.Final_NDC
-set dbName=signdoms27
+set dbName=signdoms27、VANS_CI
 call :backup
 
 rem 備份國發會_111增修 
@@ -86,10 +87,11 @@ call :backup
 
 rem 2025.02.07 增加備份衛福部OA 
 rem 2025.05.27 調整資料庫名稱 
+rem 2026.01.23 調整資料庫名稱 
 set orgName=衛福部OA 
 set programName=workspace_OASystem_JDK21
 set serverName=wildfly-34.0.0.Final_MOHW_OA
-set dbName=moeaoaMOHW
+set dbName=mohwoa
 call :backup
 
 rem 2025.10.21 增加備份經濟部EM 
