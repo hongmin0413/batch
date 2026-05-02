@@ -2,8 +2,15 @@
 chcp 65001>nul
 
 set zipExe=C:\Program Files\7-Zip\7z.exe
-set sqlServerBackupRoot=D:\DB\sqlServer2022\Backup
-set mySqlBackupRoot=D:\DB\mySql8\Backup
+rem 2026.05.02 增加容器內的路徑 
+set mssqlBackupRoot=D:\docker\DB\backup
+set mssqlBackupRootInDocker=/var/backups
+set mysqlBackupRoot=D:\docker\DB\backup
+set tidbBackupRoot=D:\docker\TiDB\backup
+rem 2026.05.02 調整db容器化後的指令開頭寫法 
+set mssqlInDocker=docker exec -i mssql-2022-latest
+set sqlcmdPath=/opt/mssql-tools18/bin/sqlcmd
+set mysqlInDocker=docker exec -i mysql-8.0.46
 
 set action=%~1
 rem 2024.07.07 增加複製檔案 
@@ -17,20 +24,22 @@ if "%action%" equ "copyFile" (
 	set fileDisc=%~3
 	set fileName=%~4
 	call :zipFile
-)else if "%action%" equ "backupSqlServer" (
-	set sqlServerInfo=%~2
+)else if "%action%" equ "backupMssql" (
+	set mssqlInfo=%~2
 	rem 因為","是特殊符號，所以在這邊將port型式做轉換 
-	set sqlServerInfo=%sqlServerInfo: -port =^^,%
-	set sqlServerDbName=%~3
-	call :backupSqlServer
-) else if "%action%" equ "backupMySql" (
-	set mySqlInfo=%~2
-	set mySqlDbName=%~3
-	call :backupMySql
-rem 2024.07.07 將backup.bat的檢查是否插入隨身碟放到這邊 
-) else if "%action%" equ "checkIsHasUsb" (
-	set usbDisc=%~2
-	call :checkIsHasUsb
+	set mssqlInfo=%mssqlInfo: -port =^,%
+	set mssqlDbName=%~3
+	call :backupMssql
+) else if "%action%" equ "backupMysql" (
+	set mysqlInfo=%~2
+	set mysqlDbName=%~3
+	rem 2026.05.01 為了區分mysql、tidb，增加mysqlType 
+	set mysqlType=%~4
+	call :backupMysql
+rem 2024.07.07 將backup.bat的檢查是否插入備份硬碟放到這邊 
+) else if "%action%" equ "checkIsHasDisk" (
+	set diskDisc=%~2
+	call :checkIsHasDisk
 )
 goto :eof
 
@@ -78,106 +87,118 @@ if "%fileName%" neq "" (
 endlocal
 goto :eof
 
-rem 備份sql server 
-:backupSqlServer
+rem 備份mssql 
+:backupMssql
 setlocal enabledelayedexpansion
-rem sqlServerDbName有值才備份 
-if "%sqlServerDbName%" neq "" (
+rem mssqlDbName有值才備份 
+if "%mssqlDbName%" neq "" (
 	echo ================================================================================ 
-	rem 拆解sqlServerDbName做備份 
-	set tempSqlServerDbName=%sqlServerDbName%
-	:splitSqlServerDbName
-	for /f "tokens=1,* delims=、" %%i in ("!tempSqlServerDbName!") do (
-		set singleSqlServerDbName=%%i
-		rem 要備份的sqlServerDb存在才備份 
-		set isSqlServerDbExist=false
-		set checkSqlServerDbSQL=SELECT name FROM sys.databases where state = 0 and name = '!singleSqlServerDbName!'
-		for /f "delims=" %%i in ('sqlcmd %sqlServerInfo% -Q "!checkSqlServerDbSQL!"^| findstr "!singleSqlServerDbName!"') do (
-			set isSqlServerDbExist=true
-		)
-		if !isSqlServerDbExist! equ true (
-			rem sqlServerDb備份檔若存在就先刪除 
-			set sqlServerdbBak=%sqlServerBackupRoot%\!singleSqlServerDbName!.bak
-			if exist "!sqlServerdbBak!" (
-                echo 有sqlServer的db-!singleSqlServerDbName!備份檔，先刪除 
-				del /f "!sqlServerdbBak!">nul
-			)
-			echo 開始備份sqlServer的db-!singleSqlServerDbName!... 
-			sqlcmd %sqlServerInfo% -Q "BACKUP DATABASE !singleSqlServerDbName! TO DISK = '!sqlServerdbBak!'">nul 
-			echo sqlServer的db-!singleSqlServerDbName!備份完畢 
-		)else (
-			echo sqlServer的db-!singleSqlServerDbName!不存在，不備份 
-		)
-		set tempSqlServerDbName=%%j
+	rem 2026.05.02 拆解密碼與其它資訊 
+	for /f "tokens=1,2 delims=;" %%i in ("%mssqlInfo%") do (
+		set mssqlInfoNoPwd=%%i
+		set SQLCMDPASSWORD=%%j
 	)
-	if "!tempSqlServerDbName!" neq "" (
-		goto splitSqlServerDbName
+	rem 拆解mssqlDbName做備份 
+	set tempMssqlDbName=%mssqlDbName%
+	:splitMssqlDbName
+	for /f "tokens=1,* delims=、" %%i in ("!tempMssqlDbName!") do (
+		set singleMssqlDbName=%%i
+		rem 要備份的mssqlDb存在才備份 
+		set singleMssqlDbNameCount=0
+		rem 2026.05.02 SET NOCOUNT ON;用來去掉(1 rows affected) 
+		set "checkMssqlDbSQL=SET NOCOUNT ON; SELECT COUNT(1) FROM sys.databases WHERE state = 0 AND name = '!singleMssqlDbName!';"
+		rem 2026.05.02 mssql-2022的sqlcmd預設強制加密，因此增加參數-C 
+		rem 2026.05.02 -h -1用來去掉表頭及虛線；-W用來移除多餘空格 
+		for /f "delims=" %%i in ('%mssqlInDocker% sh -c "export SQLCMDPASSWORD=!SQLCMDPASSWORD!; %sqlcmdPath% !mssqlInfoNoPwd! -Q ^\"!checkMssqlDbSQL!^\" -C -h -1 -W"') do (
+			set singleMssqlDbNameCount=%%i
+		)
+		if !singleMssqlDbNameCount! equ 1 (
+			set mssqlDbBak=%mssqlBackupRoot%\!singleMssqlDbName!.bak
+			set mssqlDbBakInDocker=%mssqlBackupRootInDocker%/!singleMssqlDbName!.bak
+			rem mssqlDb備份檔若存在就先刪除 
+			if exist "!mssqlDbBak!" (
+                echo 有mssql的db-!singleMssqlDbName!備份檔，先刪除 
+				del /f "!mssqlDbBak!">nul
+			)
+			echo 開始備份mssql的db-!singleMssqlDbName!... 
+			set "backupMssqlDbSQL=BACKUP DATABASE !singleMssqlDbName! TO DISK = '!mssqlDbBakInDocker!';"
+			rem mssql-2022的sqlcmd預設強制加密，因此增加參數-C 
+			%mssqlInDocker% sh -c "export SQLCMDPASSWORD=!SQLCMDPASSWORD!; %sqlcmdPath% !mssqlInfoNoPwd! -Q ^\"!backupMssqlDbSQL!^\" -C">nul
+			echo mssql的db-!singleMssqlDbName!備份完畢 
+		)else (
+			echo mssql的db-!singleMssqlDbName!不存在，不備份 
+		)
+		set tempMssqlDbName=%%j
+	)
+	if "!tempMssqlDbName!" neq "" (
+		goto splitMssqlDbName
 	)
 )
 endlocal
 goto :eof
 
-rem 備份mySql 
-:backupMySql
+rem 備份mysql、tidb 
+:backupMysql
 setlocal enabledelayedexpansion
-set cnf=mysql.cnf
-rem mySqlDbName有值才備份 
-if "%mySqlDbName%" neq "" (
+rem mysqlDbName有值才備份 
+if "%mysqlDbName%" neq "" (
 	echo ================================================================================ 
-	rem 拆解mySqlInfo做設定mysql 
-	set tempMySqlInfo=%mySqlInfo%
-	echo [client]>!cnf!
-	:splitMySqlInfo
-	for /f "tokens=1,* delims= " %%i in ("!tempMySqlInfo!") do (
-		echo %%i>>!cnf!
-		set tempMySqlInfo=%%j
+	for /f "tokens=1,2 delims=;" %%a in ("%mysqlInfo%") do (
+		set mysqlInfoNoPwd=%%a
+		set MYSQL_PWD=%%b
 	)
-	if "!tempMySqlInfo!" neq "" (
-		goto splitMySqlInfo
-	)
-	rem 拆解mySqlDbName做備份 
-	set tempMySqlDbName=%mySqlDbName%
-	:splitMySqlDbName
-	for /f "tokens=1,* delims=、" %%i in ("!tempMySqlDbName!") do (
-		set singleMySqlDbName=%%i
-		rem 要備份的mySqlDb存在才備份 
-		set isMySqlDbExist=false
-		for /f "delims=" %%i in ('mysql --defaults-extra-file^=!cnf! -e "show databases"^| findstr /x "!singleMySqlDbName!"') do (
-			set isMySqlDbExist=true
+	rem 拆解mysqlDbName做備份 
+	set tempMysqlDbName=%mysqlDbName%
+	:splitMysqlDbName
+	for /f "tokens=1,* delims=、" %%i in ("!tempMysqlDbName!") do (
+		set singleMysqlDbName=%%i
+		rem 要備份的mysqlDb存在才備份 
+		set singleMysqlDbNameCount=0
+		set "checkMysqlDbSQL=SELECT COUNT(1) FROM information_schema.schemata WHERE schema_name = '!singleMysqlDbName!';"
+		rem 2026.05.02 -N用來去掉表頭及虛線；-s用來移除多餘空格 
+		for /f "delims=" %%i in ('%mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; mysql !mysqlInfoNoPwd! -e ^\"!checkMysqlDbSQL!^\""') do (
+			set singleMysqlDbNameCount=%%i
 		)
-		if !isMySqlDbExist! equ true (
-			rem mySqlDb備份檔若存在就先刪除 
-			set mySqldbSql=%mySqlBackupRoot%\!singleMySqlDbName!.sql
-			if exist "!mySqldbSql!" (
-                echo 有mySql的db-!singleMySqlDbName!備份檔，先刪除 
-				del /f "!mySqldbSql!">nul
+		if !singleMysqlDbNameCount! equ 1 (
+			rem 2026.04.24 調整備份語法 
+			rem 2026.05.02 mysql、tidb的備份路徑、備份參數不同 
+			if "%mysqlType%" equ "tidb" (
+				set mysqlDbSql=%tidbBackupRoot%\!singleMysqlDbName!.sql
+				set mysqlBackupParam=--lock-tables --routines --triggers --disable-keys --extended-insert --quick --no-tablespaces --set-gtid-purged=OFF
+			)else (
+				set mysqlDbSql=%mysqlBackupRoot%\!singleMysqlDbName!.sql
+				set mysqlBackupParam=--single-transaction --routines --triggers --disable-keys --extended-insert --quick --no-tablespaces --set-gtid-purged=OFF
 			)
-			echo 開始備份mySql的db-!singleMySqlDbName!... 
-			mysqldump --defaults-extra-file=!cnf! --no-tablespaces --set-gtid-purged=OFF "!singleMySqlDbName!" >"!mySqldbSql!" 
-			echo mySql的db-!singleMySqlDbName!備份完畢 
+			rem mysqlDb備份檔若存在就先刪除 
+			if exist "!mysqlDbSql!" (
+                echo 有%mysqlType%的db-!singleMysqlDbName!備份檔，先刪除 
+				del /f "!mysqlDbSql!">nul
+			)
+			echo 開始備份%mysqlType%的db-!singleMysqlDbName!... 
+			%mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; mysqldump !mysqlInfoNoPwd! --databases ^\"!singleMysqlDbName!^\" !mysqlBackupParam!" > "!mysqlDbSql!"
+			echo %mysqlType%的db-!singleMysqlDbName!備份完畢 
 		)else (
-			echo mySql的db-!singleMySqlDbName!不存在，不備份 
+			echo %mysqlType%的db-!singleMysqlDbName!不存在，不備份 
 		)
-		set tempMySqlDbName=%%j
+		set tempMysqlDbName=%%j
 	)
-	if "!tempMySqlDbName!" neq "" (
-		goto splitMySqlDbName
+	if "!tempMysqlDbName!" neq "" (
+		goto splitMysqlDbName
 	)
-	del /f "mysql.cnf"
 )
 endlocal
 goto :eof
 
-rem 檢查是否插入隨身碟 
-:checkIsHasUsb
-if "%usbDisc%" equ "" (
-	echo usb槽未設定，不檢查是否插入隨身碟 
+rem 檢查是否插入備份硬碟 
+:checkIsHasDisk
+if "%diskDisc%" equ "" (
+	echo 備份硬碟槽未設定，不檢查是否插入備份硬碟 
 	echo 請按任意鍵退出... 
 	pause>nul
 	exit
-)else if not exist "%usbDisc%" (
-	echo 請插入隨身碟^(%usbDisc%^)，再按任意鍵繼續... 
+)else if not exist "%diskDisc%" (
+	echo 請插入備份硬碟^(%diskDisc%^)，再按任意鍵繼續... 
 	pause>nul
-	goto checkIsHasUsb
+	goto checkIsHasDisk
 )
 goto :eof

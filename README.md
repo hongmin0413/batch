@@ -12,22 +12,21 @@
 	* 確認config.ini的值是否正確
 
 * backup.bat：
-	* 備份重要資料至C槽、D槽、隨身碟中
-	* 檢查util.bat的zipExe、sqlServerBackupRoot、mySqlBackupRoot是否需要修改
-	* 備份位置不同時，backupRoot、otherBackupRoot1、otherBackupRoot2、backupBackup要更新
+	* 備份重要資料至硬碟中
+	* 備份位置不同時，util.bat的mssqlBackupRoot、mysqlBackupRoot、tidbBackupRoot要更新
+	* db容器變更時，檢查util.bat的mssqlBackupRootInDocker、mssqlInDocker、sqlcmdPath、mysqlInDocker是否要更新
 	* file位置不同時，fileDisc、fileName要更新
-	* db移除或離線時，sqlServerInfo、sqlServerDbName、mySqlInfo、mySqlDbName要更新
+	* db移除或離線時，mssqlInfo、mssqlDbName、mysqlInfo、mysqlDbName要更新
 	* 確認config.ini的值是否正確
 	* 排程：每月最後一天的15:00執行，錯過後會盡快執行
 	* `備份重要資料.xml`
 
 * backup_cloud.bat：
-	* 備份雲端重要資料至隨身碟中
-	* 檢查util.bat的zipExe是否需要修改
+	* 備份雲端重要資料至硬碟中
 	* 備份位置不同時，backupRoot要更新
 	* file位置不同時，cloudFile、fileName要更新
 	* 雲端名稱不同時，cloudName要更新
-	* 先將雲端資料移動至cloudFile中，再點擊此bat檔
+	* 先將雲端資料移動至C:\backupPhoneAndCloud\cloudFile中，再點擊此bat檔
 
 * backup_com.bat`(公司用)`：
 	* 備份重要資料至C槽
@@ -40,11 +39,10 @@
 	* `備份重要資料_com.xml`
 
 * backup_phone.bat：
-	* 備份手機重要資料至隨身碟中
-	* 檢查util.bat的zipExe是否需要修改
+	* 備份手機重要資料至硬碟中
 	* 備份位置不同時，backupRoot要更新
 	* file位置不同時，phoneFile、fileName要更新
-	* 先將手機資料移動至phoneFile中，再點擊此bat檔
+	* 先將手機資料移動至C:\backupPhoneAndCloud\phoneFile中，再點擊此bat檔
 
 * bcompareAddTime.bat：
 	* 延長bcompare時間
@@ -88,13 +86,14 @@
 	* 7-Zip程式位置不同時，zipExe要更新
 	* call util.bat "moveFile" "%destPath%" "%filePath%" "%fileName%"
 	* call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
-	* call util.bat "backupSqlServer" "%sqlServerInfo%" "%sqlServerDbName%"
-		* sqlServerInfo型式：-S ${host} -port ${port} -U ${user} -P ${password}
+	* call util.bat "backupSqlServer" "%mssqlInfo%" "%mssqlDbName%"
+		* sqlServerInfo型式：-S ${host} -port ${port} -U ${user};${password}
 		* sqlServerDbName若有多個db，請用"、"區隔
-	* call util.bat "backupMySql" "%mySqlInfo%" "%mySqlDbName%"
-		* mySqlInfo型式：host=${host} port=${port} user=${user}  password=${password}
-		* mySqlDbName若有多個db，請用"、"區隔
-	* call util.bat "checkIsHasUsb" "%usbDisc%" 
+	* call util.bat "backupMysql" "%mysqlInfo%" "%mysqlDbName%" "%mysqlType%"
+		* mysqlInfo型式：-h ${host} -P ${port} -u ${user};${password}
+		* mysqlDbName若有多個db，請用"、"區隔
+		* mysqlType：mysql、tidb
+	* call util.bat "checkIsHasDisk" "%diskDisc%" 
 
 **不上傳至github：**
 * msg.exe：

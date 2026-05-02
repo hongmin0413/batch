@@ -4,11 +4,11 @@ chcp 65001>nul
 set msgExe=%~dp0%\msg.exe
 
 set phoneFile=C:\backupPhoneAndCloud\phoneFile
-set usbBackupDisc=E:
-set backupRoot=%usbBackupDisc%\backup_phone
+set diskBackupDisc=E:
+set backupRoot=%diskBackupDisc%\backup_phone
 
-rem 先檢查是否插入隨身碟 
-call util.bat "checkIsHasUsb" "%usbBackupDisc%"
+rem 先檢查是否插入備份硬碟 
+call util.bat "checkIsHasDisk" "%diskBackupDisc%"
 
 rem 若備份root不存在，先建其資料夾 
 if not exist "%backupRoot%" (
