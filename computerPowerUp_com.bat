@@ -35,6 +35,7 @@ if %isOpenBcompare% equ true (
 	rem 2025.03.17 增加區分不同系統目前開啟的設定檔 
 	rem 2025.08.19 間隔時間調整為5秒 
 	rem 2025.10.21 增加經濟部EM、增加EMSystem的設定檔 
+	rem 2026.05.07 增加經濟部OA_docker 
 	for /f "delims=" %%i in ('type "C:\Project\JavaProject\更新機關設定檔\config.ini"^| find /i "="') do set %%i
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_農業部" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_智慧局" && timeout /t 5 /nobreak>nul
@@ -45,6 +46,7 @@ if %isOpenBcompare% equ true (
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_經濟部" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "MOADomsEE <--> workspace_個資處" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "OASystemEE <--> workspace_經濟部OA" && timeout /t 5 /nobreak>nul
+	start "" /min "!bcompareExe!" "OASystemEE <--> workspace_經濟部OA_docker" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "OASystemEE <--> workspace_衛福部OA" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "EMSystemEE <--> workspace_經濟部EM" && timeout /t 5 /nobreak>nul
 	start "" /min "!bcompareExe!" "!currentMOADomsOrgName!\MOADoms_settings" && timeout /t 5 /nobreak>nul
@@ -85,6 +87,7 @@ if %isOpenCursor% equ true (
 	set openCursorBatDir=D:\workspace\開啟程式編輯器
 	if exist "!openCursorBatDir!" (
 		rem 2026.03.16 不知道為什麼換成start "" /b cmd /c才開得了 
+		rem 2026.05.07 增加經濟部OA_docker 
 		cd /d "!openCursorBatDir!"
 		rem start "" /b cmd /c "cursor_農業部.bat" && timeout /t 5 /nobreak>nul
 		start "" /b cmd /c "cursor_智慧局.bat" && timeout /t 5 /nobreak>nul
@@ -95,8 +98,9 @@ if %isOpenCursor% equ true (
 		rem start "" /b cmd /c "cursor_經濟部.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_個資處.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_經濟部OA.bat" && timeout /t 5 /nobreak>nul
-		start "" /b cmd /c "cursor_衛福部OA.bat" && timeout /t 5 /nobreak>nul
-		start "" /b cmd /c "cursor_經濟部EM.bat" && timeout /t 5 /nobreak>nul
+		start "" /b cmd /c "cursor_經濟部OA_docker.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_衛福部OA.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_經濟部EM.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
 	)
 )

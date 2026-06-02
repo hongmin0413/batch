@@ -124,17 +124,14 @@ rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem 2026.04.26 增加備份docker(先備份db，再備份資料) 
 rem 2026.05.02 mssql-ATM不再備份 
 rem 2026.05.02 mysql-library不再備份 
-rem set mssqlInfo=%mssqlInfo1% 
+rem set "mssqlInfo=%mssqlInfo1%" 
 rem set mssqlDbName=ATM 
 rem call util.bat "backupMssql" "%mssqlInfo%" "%mssqlDbName%" 
-rem set mysqlInfo=%mysqlInfo1% 
+rem set "mysqlInfo=%mysqlInfo1%" 
 rem set mysqlDbName=library 
 rem call util.bat "backupMysql" "%mysqlInfo%" "%mysqlDbName%" "mysql" 
-set mysqlInfo=%tidbInfo1%
+set "mysqlInfo=%tidbInfo1%"
 set mysqlDbName=ALMS_localhost
-call util.bat "backupMysql" "%mysqlInfo%" "%mysqlDbName%" "tidb"
-set mysqlInfo=%tidbInfo2%
-set mysqlDbName=ALMS
 call util.bat "backupMysql" "%mysqlInfo%" "%mysqlDbName%" "tidb"
 set fileName=docker
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"

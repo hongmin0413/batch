@@ -11,6 +11,8 @@ rem 2026.05.02 調整db容器化後的指令開頭寫法
 set mssqlInDocker=docker exec -i mssql-2022-latest
 set sqlcmdPath=/opt/mssql-tools18/bin/sqlcmd
 set mysqlInDocker=docker exec -i mysql-8.0.46
+set mysqlPath=/usr/bin/mysql
+set mysqldumpPath=/usr/bin/mysqldump
 
 set action=%~1
 rem 2024.07.07 增加複製檔案 
@@ -25,13 +27,11 @@ if "%action%" equ "copyFile" (
 	set fileName=%~4
 	call :zipFile
 )else if "%action%" equ "backupMssql" (
-	set mssqlInfo=%~2
-	rem 因為","是特殊符號，所以在這邊將port型式做轉換 
-	set mssqlInfo=%mssqlInfo: -port =^,%
+	set "mssqlInfo=%~2"
 	set mssqlDbName=%~3
 	call :backupMssql
 ) else if "%action%" equ "backupMysql" (
-	set mysqlInfo=%~2
+	set "mysqlInfo=%~2"
 	set mysqlDbName=%~3
 	rem 2026.05.01 為了區分mysql、tidb，增加mysqlType 
 	set mysqlType=%~4
@@ -95,8 +95,8 @@ if "%mssqlDbName%" neq "" (
 	echo ================================================================================ 
 	rem 2026.05.02 拆解密碼與其它資訊 
 	for /f "tokens=1,2 delims=;" %%i in ("%mssqlInfo%") do (
-		set mssqlInfoNoPwd=%%i
-		set SQLCMDPASSWORD=%%j
+		set "mssqlInfoNoPwd=%%i"
+		set "SQLCMDPASSWORD=%%j"
 	)
 	rem 拆解mssqlDbName做備份 
 	set tempMssqlDbName=%mssqlDbName%
@@ -109,7 +109,7 @@ if "%mssqlDbName%" neq "" (
 		set "checkMssqlDbSQL=SET NOCOUNT ON; SELECT COUNT(1) FROM sys.databases WHERE state = 0 AND name = '!singleMssqlDbName!';"
 		rem 2026.05.02 mssql-2022的sqlcmd預設強制加密，因此增加參數-C 
 		rem 2026.05.02 -h -1用來去掉表頭及虛線；-W用來移除多餘空格 
-		for /f "delims=" %%i in ('%mssqlInDocker% sh -c "export SQLCMDPASSWORD=!SQLCMDPASSWORD!; %sqlcmdPath% !mssqlInfoNoPwd! -Q ^\"!checkMssqlDbSQL!^\" -C -h -1 -W"') do (
+		for /f "delims=" %%i in ('%mssqlInDocker% sh -c "export SQLCMDPASSWORD=!SQLCMDPASSWORD!; ^\"%sqlcmdPath%^\" !mssqlInfoNoPwd! -Q ^\"!checkMssqlDbSQL!^\" -C -h -1 -W"') do (
 			set singleMssqlDbNameCount=%%i
 		)
 		if !singleMssqlDbNameCount! equ 1 (
@@ -123,7 +123,7 @@ if "%mssqlDbName%" neq "" (
 			echo 開始備份mssql的db-!singleMssqlDbName!... 
 			set "backupMssqlDbSQL=BACKUP DATABASE !singleMssqlDbName! TO DISK = '!mssqlDbBakInDocker!';"
 			rem mssql-2022的sqlcmd預設強制加密，因此增加參數-C 
-			%mssqlInDocker% sh -c "export SQLCMDPASSWORD=!SQLCMDPASSWORD!; %sqlcmdPath% !mssqlInfoNoPwd! -Q ^\"!backupMssqlDbSQL!^\" -C">nul
+			%mssqlInDocker% sh -c "export SQLCMDPASSWORD=!SQLCMDPASSWORD!; ^\"%sqlcmdPath%^\" !mssqlInfoNoPwd! -Q ^\"!backupMssqlDbSQL!^\" -C">nul
 			echo mssql的db-!singleMssqlDbName!備份完畢 
 		)else (
 			echo mssql的db-!singleMssqlDbName!不存在，不備份 
@@ -143,9 +143,9 @@ setlocal enabledelayedexpansion
 rem mysqlDbName有值才備份 
 if "%mysqlDbName%" neq "" (
 	echo ================================================================================ 
-	for /f "tokens=1,2 delims=;" %%a in ("%mysqlInfo%") do (
-		set mysqlInfoNoPwd=%%a
-		set MYSQL_PWD=%%b
+	for /f "tokens=1,2 delims=;" %%i in ("%mysqlInfo%") do (
+		set "mysqlInfoNoPwd=%%i"
+		set "MYSQL_PWD=%%j"
 	)
 	rem 拆解mysqlDbName做備份 
 	set tempMysqlDbName=%mysqlDbName%
@@ -155,8 +155,7 @@ if "%mysqlDbName%" neq "" (
 		rem 要備份的mysqlDb存在才備份 
 		set singleMysqlDbNameCount=0
 		set "checkMysqlDbSQL=SELECT COUNT(1) FROM information_schema.schemata WHERE schema_name = '!singleMysqlDbName!';"
-		rem 2026.05.02 -N用來去掉表頭及虛線；-s用來移除多餘空格 
-		for /f "delims=" %%i in ('%mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; mysql !mysqlInfoNoPwd! -e ^\"!checkMysqlDbSQL!^\""') do (
+		for /f "delims=" %%i in ('%mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; ^\"%mysqlPath%^\" !mysqlInfoNoPwd! -e ^\"!checkMysqlDbSQL!^\""') do (
 			set singleMysqlDbNameCount=%%i
 		)
 		if !singleMysqlDbNameCount! equ 1 (
@@ -171,11 +170,11 @@ if "%mysqlDbName%" neq "" (
 			)
 			rem mysqlDb備份檔若存在就先刪除 
 			if exist "!mysqlDbSql!" (
-                echo 有%mysqlType%的db-!singleMysqlDbName!備份檔，先刪除 
+			echo 有%mysqlType%的db-!singleMysqlDbName!備份檔，先刪除 
 				del /f "!mysqlDbSql!">nul
 			)
 			echo 開始備份%mysqlType%的db-!singleMysqlDbName!... 
-			%mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; mysqldump !mysqlInfoNoPwd! --databases ^\"!singleMysqlDbName!^\" !mysqlBackupParam!" > "!mysqlDbSql!"
+			%mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; ^\"%mysqldumpPath%^\" !mysqlInfoNoPwd! --databases ^\"!singleMysqlDbName!^\" !mysqlBackupParam!" > "!mysqlDbSql!"
 			echo %mysqlType%的db-!singleMysqlDbName!備份完畢 
 		)else (
 			echo %mysqlType%的db-!singleMysqlDbName!不存在，不備份 

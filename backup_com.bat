@@ -9,9 +9,17 @@ set backupBackup=history
 set programRoot=D:\workspace
 rem 2025.10.21 調整路徑 
 set serverRoot=D:\APPS\wildfly
-set dbBackupRoot=D:\DB\SQL2022\Backup
+set mssqlBackupRoot=D:\DB\SQL2022\Backup
+set sqlcmdPath=C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD.EXE
+rem 2026.05.25 調整db容器化後的指令開頭寫法 
+set dockerBackupRoot=D:\APPS\docker\DB\backup
+set postgresInDocker=docker exec -i postgres-17.9-alpine3.23
+set psqlPath=/usr/local/bin/psql
+set pgDumpPath=/usr/local/bin/pg_dump
+rem 讀取config.ini並設為參數
+for /f "delims=" %%i in ('type "config.ini"^| find /i "="') do set %%i
 
-echo 即將備份program、server、DB、其它資料夾，若要完整備份，請先關閉相關應用程式 
+echo 即將備份program、server、db、其它資料夾，若要完整備份，請先關閉相關應用程式 
 echo 請按任意鍵繼續... 
 pause>nul
 
@@ -25,21 +33,20 @@ rem 2024.07.23 增加備份MOADoms2501
 set orgName=農業部 
 set programName=workspace_MOA_COA
 set serverName=wildfly-21.0.0.Final_MOA
-set dbName=MOADoms00、MOADoms25、eipdb、MOADoms2501
+set mssqlDbName=MOADoms00、MOADoms25、eipdb、MOADoms2501
 call :backup
 
 rem 備份智慧局 
 set orgName=智慧局 
 set programName=workspace_MOA_TIPO
 set serverName=wildfly-21.0.0.Final_TIPO
-set dbName=signdoms30new
+set mssqlDbName=signdoms30new
 call :backup
 
 rem 備份智慧局_111增修 
+rem server、db與智慧局同，不備份 
 set orgName=智慧局_111增修 
 set programName=workspace_MOA_TIPO
-rem set serverName=wildfly-21.0.0.Final_TIPO(與智慧局同，不備份) 
-rem set dbName=signdoms30new(與智慧局同，不備份) 
 call :backup
 
 rem 備份國發會 
@@ -47,42 +54,48 @@ rem 2026.04.02 增加備份VANS_CI
 set orgName=國發會 
 set programName=workspace_MOA_CI
 set serverName=wildfly-10.0.0.Final_NDC
-set dbName=signdoms27、VANS_CI
+set mssqlDbName=signdoms27、VANS_CI
 call :backup
 
 rem 備份國發會_111增修 
+rem server、db與國發會同，不備份 
 set orgName=國發會_111增修 
 set programName=workspace_MOA_CI
-rem set serverName=wildfly-10.0.0.Final_NDC(與國發會同，不備份) 
-rem set dbName=signdoms27(與國發會同，不備份) 
 call :backup
 
 rem 備份農險基金 
 set orgName=農險基金 
 set programName=workspace_MOA_農保基金
 set serverName=wildfly-20.0.1.Final_農險基金
-set dbName=signdoms32
+set mssqlDbName=signdoms32
 call :backup
 
 rem 備份經濟部 
 set orgName=經濟部 
 set programName=workspace_MOA_MOEA
 set serverName=wildfly-21.0.0.Final_MOEA
-set dbName=signdomsMOEANew、signdomsAOC
+set mssqlDbName=signdomsMOEANew、signdomsAOC
 call :backup
 
 rem 2024.10.07 增加備份個資處 
 set orgName=個資處 
 set programName=workspace_PDPC
 set serverName=wildfly-21.0.0.Final_PDPC
-set dbName=signdomsPDPC
+set mssqlDbName=signdomsPDPC
 call :backup
 
 rem 備份經濟部OA 
 set orgName=經濟部OA 
 set programName=workspace_OASystem_JDK17
 set serverName=wildfly-28.0.1.Final_MOEA_OA
-set dbName=moeaoa
+set mssqlDbName=moeaoa
+call :backup
+
+rem 2026.05.07 增加備份經濟部OA_docker 
+set orgName=經濟部OA_docker 
+set programName=workspace_OASystem_JDK17_docker
+set serverName=wildfly-28.0.1.Final_MOEA_OA_docker
+set postgresDbName=moeaoa
 call :backup
 
 rem 2025.02.07 增加備份衛福部OA 
@@ -91,19 +104,24 @@ rem 2026.01.23 調整資料庫名稱
 set orgName=衛福部OA 
 set programName=workspace_OASystem_JDK21
 set serverName=wildfly-34.0.0.Final_MOHW_OA
-set dbName=mohwoa
+set mssqlDbName=mohwoa
 call :backup
 
 rem 2025.10.21 增加備份經濟部EM 
 set orgName=經濟部EM 
 set programName=workspace_EMSystem
 set serverName=wildfly-37.0.1.Final_MOEA_EM
-set dbName=moeaem
+set mssqlDbName=moeaem
 call :backup
 
 rem 2025.09.30 增加備份Q-dir資料 
 set copyFilePath=D:\Tools\BC
 set copyFileName=Q-Dir
+call :copyFile
+
+rem 2026.05.07 增加備份docker資料 
+set copyFilePath=D:\APPS
+set copyFileName=docker
 call :copyFile
 
 set msg=備份完畢 
@@ -167,44 +185,100 @@ if "%serverName%" neq "" (
 		echo 【%orgName%】版的server不存在，不備份
 	)
 )
-rem dbName有值才備份 
-if "%dbName%" neq "" (
+rem mssqlDbName有值才備份 
+if "%mssqlDbName%" neq "" (
 	echo ================================================================================ 
-	rem 拆解dbName做備份 
-	set tempDbName=%dbName%
-	:splitDbName
-	for /f "tokens=1,* delims=、" %%i in ("!tempDbName!") do (
-		set singleDbName=%%i
-		rem 要備份的db存在且未離線才備份 
-		set isDbExist=false
-		set checkDbSQL=SELECT name FROM sys.databases where state = 0 and name = '!singleDbName!'
-		for /f "delims=" %%i in ('sqlcmd -S localhost^,1433 -Q "!checkDbSQL!"^| findstr "!singleDbName!"') do (
-			set isDbExist=true
+	rem 2026.05.02 拆解密碼與其它資訊 
+	for /f "tokens=1,2 delims=;" %%i in ("%mssqlInfo%") do (
+		set "mssqlInfoNoPwd=%%i"
+		set "SQLCMDPASSWORD=%%j"
+	)
+	rem 拆解mssqlDbName做備份 
+	set tempMssqlDbName=%mssqlDbName%
+	:splitMssqlDbName
+	for /f "tokens=1,* delims=、" %%i in ("!tempMssqlDbName!") do (
+		set singleMssqlDbName=%%i
+		rem 要備份的mssqlDb存在才備份 
+		set singleMssqlDbNameCount=0
+		rem 2026.05.02 SET NOCOUNT ON;用來去掉(1 rows affected) 
+		set "checkMssqlDbSQL=SET NOCOUNT ON; SELECT COUNT(1) FROM sys.databases WHERE state = 0 AND name = '!singleMssqlDbName!';"
+		rem 2026.05.02 mssql-2022的sqlcmd預設強制加密，因此增加參數-C 
+		rem 2026.05.02 -h -1用來去掉表頭及虛線；-W用來移除多餘空格 
+		for /f "delims=" %%i in ('""%sqlcmdPath%" !mssqlInfoNoPwd! -Q "!checkMssqlDbSQL!" -C -h -1 -W"') do (
+			set singleMssqlDbNameCount=%%i
 		)
-		if !isDbExist! equ true (
+		if !singleMssqlDbNameCount! equ 1 (
 			rem c槽的db備份檔若存在就先移到備份的備份中 
-			set dbBak=!backupPath!\!singleDbName!.bak
-			if exist "!dbBak!" (
-				echo 有【%orgName%】版的db-!singleDbName!備份檔，先移到備份的備份中 
-				move /y "!dbBak!" !backupBackupPath!>nul
+			set mssqlDbBak=!backupPath!\!singleMssqlDbName!.bak
+			if exist "!mssqlDbBak!" (
+				echo 有【%orgName%】版的db-!singleMssqlDbName!備份檔，先移到備份的備份中 
+				move /y "!mssqlDbBak!" !backupBackupPath!>nul
 			)
 			rem d槽的db備份檔若存在就先刪除 
-			set dbBak2=%dbBackupRoot%\!singleDbName!.bak
-			if exist "!dbBak2!" (
-				del /f "!dbBak2!"
+			set mssqlDbBak2=%mssqlBackupRoot%\!singleMssqlDbName!.bak
+			if exist "!mssqlDbBak2!" (
+				del /f "!mssqlDbBak2!"
 			)
 			rem 先備份在c槽，再複製到d槽 
-			echo 開始備份【%orgName%】版的db-!singleDbName!... 
-			sqlcmd -S localhost^,1433 -Q "BACKUP DATABASE !singleDbName! TO DISK = '!dbBak!'">nul 
-			copy /y "!dbBak!" "!dbBak2!">nul 
-			echo 【%orgName%】版的db-!singleDbName!備份完畢
+			echo 開始備份【%orgName%】版的db-!singleMssqlDbName!... 
+			set "backupMssqlDbSQL=BACKUP DATABASE !singleMssqlDbName! TO DISK = '!mssqlDbBak!';"
+			rem mssql-2022的sqlcmd預設強制加密，因此增加參數-C 
+			"%sqlcmdPath%" !mssqlInfoNoPwd! -Q "!backupMssqlDbSQL!" -C>nul
+			copy /y "!mssqlDbBak!" "!mssqlDbBak2!">nul 
+			echo 【%orgName%】版的db-!singleMssqlDbName!備份完畢
 		)else (
-			echo 【%orgName%】版的db-!singleDbName!不存在或已離線，不備份
+			echo 【%orgName%】版的db-!singleMssqlDbName!不存在，不備份 
 		)
-		set tempDbName=%%j
+		set tempMssqlDbName=%%j
 	)
-	if "!tempDbName!" neq "" (
-		goto splitDbName
+	if "!tempMssqlDbName!" neq "" (
+		goto splitMssqlDbName
+	)
+)
+rem postgresDbName有值才備份 
+if "%postgresDbName%" neq "" (
+	echo ================================================================================ 
+	for /f "tokens=1,2 delims=;" %%i in ("%postgresInfo%") do (
+		set "postgresInfoNoPwd=%%i"
+		set "PGPASSWORD=%%j"
+	)
+	rem 拆解postgresDbName做備份 
+	set tempPostgresDbName=%postgresDbName%
+	:splitPostgresDbName
+	for /f "tokens=1,* delims=、" %%i in ("!tempPostgresDbName!") do (
+		set singlePostgresDbName=%%i
+		rem 要備份的postgresDb存在才備份 
+		set singlePostgresDbNameCount=0
+		rem 2026.05.25 -t用來去掉表頭及虛線；-A用來移除多餘空格 
+		set "checkPostgresDbSQL=SELECT COUNT(1) FROM pg_database WHERE datallowconn = true AND datname = '!singlePostgresDbName!';"
+		for /f "delims=" %%i in ('%postgresInDocker% sh -c "export PGPASSWORD=!PGPASSWORD!; ^\"%psqlPath%^\" !postgresInfoNoPwd! -c ^\"!checkPostgresDbSQL!^\" -t -A"') do (
+			set singlePostgresDbNameCount=%%i
+		)
+		if !singlePostgresDbNameCount! equ 1 (
+			rem c槽的db備份檔若存在就先移到備份的備份中 
+			set postgresDbSql=!backupPath!\!singlePostgresDbName!.sql
+			if exist "!postgresDbSql!" (
+				echo 有【%orgName%】版的db-!singlePostgresDbName!備份檔，先移到備份的備份中 
+				move /y "!postgresDbSql!" !backupBackupPath!>nul
+			)
+			rem d槽的db備份檔若存在就先刪除 
+			set postgresDbSql2=%dockerBackupRoot%\!singlePostgresDbName!.sql
+			if exist "!postgresDbSql2!" (
+				del /f "!postgresDbSql2!"
+			)
+			rem 先備份在c槽，再複製到d槽 
+			echo 開始備份【%orgName%】版的db-!singlePostgresDbName!... 
+			set postgresBackupParam=--no-tablespaces
+			%postgresInDocker% sh -c "export PGPASSWORD=!PGPASSWORD!; ^\"%pgDumpPath%^\" !postgresInfoNoPwd! -d ^\"!singlePostgresDbName!^\" !postgresBackupParam!" > "!postgresDbSql!"
+			copy /y "!postgresDbSql!" "!postgresDbSql2!">nul 
+			echo 【%orgName%】版的db-!singlePostgresDbName!備份完畢 
+		)else (
+			echo 【%orgName%】版的db-!singlePostgresDbName!不存在，不備份 
+		)
+		set tempPostgresDbName=%%j
+	)
+	if "!tempPostgresDbName!" neq "" (
+		goto splitPostgresDbName
 	)
 )
 endlocal
@@ -212,7 +286,8 @@ rem 清空參數後返回
 set orgName=
 set programName=
 set serverName=
-set dbName=
+set mssqlDbName=
+set postgresDbName=
 goto :eof
 
 rem 複製檔案 
