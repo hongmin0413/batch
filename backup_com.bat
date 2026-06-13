@@ -119,6 +119,11 @@ set copyFilePath=D:\Tools\BC
 set copyFileName=Q-Dir
 call :copyFile
 
+rem 2026.06.12 增加備份batch資料 
+set copyFilePath=D:\Tools\BC
+set copyFileName=batch
+call :copyFile
+
 rem 2026.05.07 增加備份docker資料 
 set copyFilePath=D:\APPS
 set copyFileName=docker
