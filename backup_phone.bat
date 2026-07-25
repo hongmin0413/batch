@@ -33,6 +33,10 @@ rem 備份音樂
 set fileName=音樂
 call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
 
+rem 2026.07.24 增加備份bubble 
+set fileName=bubble
+call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
+
 set msg=備份完畢 
 if exist "%msgExe%" (
 	"%msgExe%" ^* "%msg%" 
