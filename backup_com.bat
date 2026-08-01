@@ -37,8 +37,9 @@ set mssqlDbName=MOADoms00、MOADoms25、eipdb、MOADoms2501
 call :backup
 
 rem 備份智慧局 
+rem 2026.07.31 調整程式目錄 
 set orgName=智慧局 
-set programName=workspace_MOA_TIPO
+set programName=MOADoms_TIPO
 set serverName=wildfly-21.0.0.Final_TIPO
 set mssqlDbName=signdoms30new
 call :backup

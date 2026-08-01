@@ -12,7 +12,7 @@ if not exist "%dirName%" (
 	)
 	goto pauseAndExit
 )
-rem 113.02.20 增加檢查本地是否有repository 
+rem 2024.02.20 增加檢查本地是否有repository 
 if not exist "%dirName%\.git" (
     echo %cd%\%dirName%下無repository，請初始化git或確認dirName是否設定錯誤 
     echo 請按任意鍵退出... 
@@ -50,7 +50,7 @@ if %action% equ 2 (
 :commitAndPush
 rem 先檢查程式碼是否更新 
 call :seeStatus
-rem 113.10.02 增加設定要add的檔案並檢查是否都存在 
+rem 2024.10.02 增加設定要add的檔案並檢查是否都存在 
 set /p addFile=請輸入要add的檔案(多個檔案請以一個空格區隔、子檔案的路徑請用"/"，預設全部)：
 if "%addFile%" equ "" (
 	set addFile=.
@@ -76,7 +76,7 @@ if %pushError% neq 0 (
 	rem errorlevel=128 
 	)else (
 		echo gitName設定錯誤，遠端repository不存在，退回commit前的版本 
-		rem 113.02.20 增加退回commit前的版本 
+		rem 2024.02.20 增加退回commit前的版本 
         git reset HEAD~1
 		echo 請按任意鍵退出... 
 		goto pauseAndExit
@@ -170,7 +170,7 @@ goto pauseAndExit
 
 :splitStringAndEcho
 rem 拆解字串並echo 
-rem 113.02.23 修改區隔符號為"、" 
+rem 2024.02.23 修改區隔符號為"、" 
 for /f "tokens=1,* delims=、" %%i in ("%splitString%") do (
 	echo %%i 
 	set splitString=%%j

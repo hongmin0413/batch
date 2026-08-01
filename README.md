@@ -1,13 +1,13 @@
 # batch
-* gitBatch\gitConfig.bat：
+* gitBatch/gitConfig.bat：
 	* 調整git config的程式
 	* 確認config.ini的值是否正確
 
-* gitBatch\init.bat：
+* gitBatch/init.bat：
 	* 初始化git時點擊的程式
 	* 確認config.ini的值是否正確
 
-* gitBatch\update.bat：
+* gitBatch/update.bat：
 	* 執行push or 執行pull or 看status時實際執行的程式
 	* 確認config.ini的值是否正確
 
@@ -79,11 +79,15 @@
 	* `筆電開機後要先開啟的應用程式_com.xml`
 
 * svnUpdate_com.bat`(公司用)`：
-	* 更新SVN
-	* SVN程式位置不同時，svnExe要更新
+	* 更新本地svn、執行成功後會執行svnUpdateToRemoteGit_com.bat
+	* 本地svn程式位置不同時，svnExe要更新
 	* 要更新的資料夾位置不同時，updateRootFile要更新
 	* 排程：平日09:00、14:30執行，錯過後會盡快執行
 	* `更新SVN_com.xml`
+
+* svnUpdateToRemoteGit_com.bat`(公司用)`：
+	* 同步本地svn變更至遠端git
+	* 遠端git位置不同時，gitDirPath要更新
 
 * util.bat：
 	* bat功能大集合
