@@ -42,6 +42,10 @@
 	* 排程：每月最後一天的的18:00執行，錯過後會盡快執行
 	* `備份重要資料_com.xml`
 
+* backup_disk2PCloud.bat：
+	* 備份+加密硬碟資料至pCloud中
+	* 備份位置不同時，backupRoot要更新
+
 * backup_phone.bat：
 	* 備份手機重要資料至硬碟中
 	* 備份位置不同時，backupRoot要更新
