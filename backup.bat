@@ -38,8 +38,9 @@ set backupDiscName=disc-c
 call :initialBackupDisc
 
 rem 2026.02.07 增加備份antigravitySetting 
-set fileName=antigravitySetting
-call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2026.08.09 不再備份 
+rem set fileName=antigravitySetting
+rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2025.06.20 增加備份backupPhoneAndCloud_backup，用來存結構，換筆電後要複製一份並拿掉"_backup" 
 set fileName=backupPhoneAndCloud_backup
@@ -55,8 +56,9 @@ set fileName=CrystalDiskInfo
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2025.01.20 增加備份cursorSetting 
-set fileName=cursorSetting
-call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2026.08.09 不再備份 
+rem set fileName=cursorSetting
+rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2024.02.27 增加備份fakeFlashTest 
 set fileName=fakeFlashTest
@@ -131,7 +133,7 @@ rem set "mysqlInfo=%mysqlInfo1%"
 rem set mysqlDbName=library 
 rem call util.bat "backupMysql" "%mysqlInfo%" "%mysqlDbName%" "mysql" 
 set "mysqlInfo=%tidbInfo1%"
-set mysqlDbName=ALMS_localhost
+set mysqlDbName=ALMS、ALMS_dev_revise_setUpAccount
 call util.bat "backupMysql" "%mysqlInfo%" "%mysqlDbName%" "tidb"
 set fileName=docker
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
@@ -141,8 +143,9 @@ set fileName=eclipse-workspace
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份eclipse-workspace_JavaWeb 
-set fileName=eclipse-workspace_JavaWeb
-call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2026.08.01 不再備份 
+rem set fileName=eclipse-workspace_JavaWeb
+rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份githubWorkspace 
 set fileName=githubWorkspace
@@ -153,7 +156,7 @@ set fileName=html_css_javascript
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份incomeTax 
-rem 2026.05.02 incomeTax不再備份 
+rem 2026.05.02 不再備份 
 rem set fileName=incomeTax
 rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
@@ -167,8 +170,9 @@ set fileName=java
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2025.01.19 增加備份javaWebWorkspace 
-set fileName=javaWebWorkspace
-call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2026.08.01 不再備份 
+rem set fileName=javaWebWorkspace
+rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份pokemon 
 set fileName=pokemon
