@@ -21,13 +21,15 @@ if %isOpenCursor% equ true (
 	if exist "!openCursorDir!" (
 		rem 2025.06.20 調整開啟寫法，避免每次都拋錯 
 		rem 2026.03.15 參考開啟Antigravity，不知道為什麼換成start "" /b cmd /c才開得了 
+		rem 2026.08.16 調整bat名稱 
 		cd /d "!openCursorDir!"
-		rem start "" /b cmd /c "AITool.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "AIWork.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "ai-produce-sql-hex.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "ai-tool-hex.bat" && timeout /t 5 /nobreak>nul
 		start "" /b cmd /c "alms.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "batch.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "batch-dev.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "checkPeopleId.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "chat-talker-hex.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "check-national-id-number.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "linebot-guess-number.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "station-typing.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
@@ -39,11 +41,10 @@ if %isOpenAntigravity% equ true (
 	set openAntigravityDir=D:\githubWorkspace\01_開啟程式編輯器
 	if exist "!openAntigravityDir!" (
 		rem 2026.02.20 不知道為什麼換成start "" /b cmd /c才開得了 
+		rem 2026.08.16 調整bat名稱 
 		cd /d "!openAntigravityDir!"
-		rem start "" /b cmd /c "AITool_agy.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "AIWork_agy.bat" && timeout /t 5 /nobreak>nul
 		start "" /b cmd /c "alms_agy.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "checkPeopleId_agy.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "check-national-id-number_agy.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "linebot-guess-number_agy.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
 	)
@@ -57,7 +58,7 @@ if %isOpenQ-dir% equ true (
 rem 開啟bcompare 
 if %isOpenBcompare% equ true (
     set bcompareExe=D:\Beyond Compare 4\BCompare.exe
-	set cloudDir=H:\我的雲端硬碟\programWorkspace\batch
+	set cloudDir=H:\我的雲端硬碟\programWorkspace
 	rem 2024.10.06 參考開啟eclipse方式，確保開啟順序且不會中途卡住 
 	rem 2024.10.06 增加batch 
 	rem 2025.01.18 更換alms目錄 
