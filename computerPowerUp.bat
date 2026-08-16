@@ -22,7 +22,14 @@ if %isOpenCursor% equ true (
 		rem 2025.06.20 調整開啟寫法，避免每次都拋錯 
 		rem 2026.03.15 參考開啟Antigravity，不知道為什麼換成start "" /b cmd /c才開得了 
 		cd /d "!openCursorDir!"
-		start "" /b cmd /c "ALMS_cursor.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "AITool.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "AIWork.bat" && timeout /t 5 /nobreak>nul
+		start "" /b cmd /c "alms.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "batch.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "batch-dev.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "checkPeopleId.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "linebot-guess-number.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "station-typing.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
 	)
 )
@@ -33,12 +40,11 @@ if %isOpenAntigravity% equ true (
 	if exist "!openAntigravityDir!" (
 		rem 2026.02.20 不知道為什麼換成start "" /b cmd /c才開得了 
 		cd /d "!openAntigravityDir!"
-		rem start "" /b cmd /c  "AITool.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c  "AIWork.bat" && timeout /t 5 /nobreak>nul
-		start "" /b cmd /c "ALMS.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c  "ALMS.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c  "checkPeopleId.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c  "linebot-guess-number.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "AITool_agy.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "AIWork_agy.bat" && timeout /t 5 /nobreak>nul
+		start "" /b cmd /c "alms_agy.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "checkPeopleId_agy.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "linebot-guess-number_agy.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
 	)
 )
@@ -54,20 +60,18 @@ if %isOpenBcompare% equ true (
 	set cloudDir=H:\我的雲端硬碟\programWorkspace\batch
 	rem 2024.10.06 參考開啟eclipse方式，確保開啟順序且不會中途卡住 
 	rem 2024.10.06 增加batch 
-	rem 2025.01.18 更換ALMS目錄 
+	rem 2025.01.18 更換alms目錄 
 	rem 2025.04.20 增加cursorSetting 
 	rem 2026.01.31 更換batch目錄 
 	rem 2026.02.07 間隔時間調整為5秒 
 	rem 2026.03.16 batch增加cloud，當有連接到雲端時 
-	start "" /min "!bcompareExe!" "github <--> localhost_ALMS" && timeout /t 5 /nobreak>nul
-	rem start "" /min "!bcompareExe!" "company <--> localhost_ALMS" && timeout /t 5 /nobreak>nul
-	start "" /min "!bcompareExe!" "github <--> localhost_batch" && timeout /t 5 /nobreak>nul
+	rem 2026.08.01 alms增加cloud，當有連接到雲端時 
 	if exist "!cloudDir!" (
-		start "" /min "!bcompareExe!" "cloud <--> localhost_batch" && timeout /t 5 /nobreak>nul
+		start "" /min "!bcompareExe!" "cloud <--> alms" && timeout /t 5 /nobreak>nul
+		start "" /min "!bcompareExe!" "cloud <--> batch" && timeout /t 5 /nobreak>nul
 	)
-	rem start "" /min "!bcompareExe!" "cursor <--> localhost_cursorSetting" && timeout /t 5 /nobreak>nul
-	rem start "" /min "!bcompareExe!" "company <--> localhost_cursorSetting" && timeout /t 5 /nobreak>nul
-	rem start "" /min "!bcompareExe!" "gitBatch" && timeout /t 5 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "cloud <--> cursorSetting" && timeout /t 5 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "cloud <--> antigravitySetting" && timeout /t 5 /nobreak>nul
 )
 
 rem 開啟chrome 
