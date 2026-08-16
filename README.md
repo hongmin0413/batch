@@ -1,15 +1,6 @@
 # batch
-* gitBatch/gitConfig.bat：
-	* 調整git config的程式
-	* 確認config.ini的值是否正確
-
-* gitBatch/init.bat：
-	* 初始化git時點擊的程式
-	* 確認config.ini的值是否正確
-
-* gitBatch/update.bat：
-	* 執行push or 執行pull or 看status時實際執行的程式
-	* 確認config.ini的值是否正確
+* gitBatch/XXX.bat：
+	* 參照gitBatch/README.md
 
 * backup.bat：
 	* 備份重要資料至硬碟中
