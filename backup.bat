@@ -96,8 +96,9 @@ set fileName=apache-tomcat
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2024.10.06 增加備份batch 
-set fileName=batch
-call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2026.08.29 不再備份 
+rem set fileName=batch
+rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份Beyond Compare 4 
 set fileName=Beyond Compare 4
