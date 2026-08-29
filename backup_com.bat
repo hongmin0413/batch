@@ -30,14 +30,16 @@ if not exist "%backupRoot%" (
 
 rem 備份農業部 
 rem 2024.07.23 增加備份MOADoms2501 
+rem 2026.08.17 調整程式目錄 
 set orgName=農業部 
-set programName=workspace_MOA_COA
+set programName=MOADoms_MOA
 set serverName=wildfly-21.0.0.Final_MOA
 set mssqlDbName=MOADoms00、MOADoms25、eipdb、MOADoms2501
 call :backup
 
 rem 備份智慧局 
 rem 2026.07.31 調整程式目錄 
+rem 2026.08.05 智慧局_115增修的程式已增加至此程式目錄，因此會一起備份 
 set orgName=智慧局 
 set programName=MOADoms_TIPO
 set serverName=wildfly-21.0.0.Final_TIPO
@@ -52,10 +54,12 @@ call :backup
 
 rem 備份國發會 
 rem 2026.04.02 增加備份VANS_CI 
+rem 2026.08.17 調整程式目錄 
+rem 2026.08.17 增加備份signdoms27_many-features 
 set orgName=國發會 
-set programName=workspace_MOA_CI
+set programName=MOADoms_NDC
 set serverName=wildfly-10.0.0.Final_NDC
-set mssqlDbName=signdoms27、VANS_CI
+set mssqlDbName=signdoms27、signdoms27_many-features、VANS_CI
 call :backup
 
 rem 備份國發會_111增修 
@@ -65,22 +69,26 @@ set programName=workspace_MOA_CI
 call :backup
 
 rem 備份農險基金 
+rem 2026.08.18 調整程式目錄 
 set orgName=農險基金 
-set programName=workspace_MOA_農保基金
-set serverName=wildfly-20.0.1.Final_農險基金
+set programName=MOADoms_TAIF
+set serverName=wildfly-20.0.1.Final_TAIF
 set mssqlDbName=signdoms32
 call :backup
 
 rem 備份經濟部 
+rem 2026.08.17 調整程式目錄 
+rem 2026.08.17 增加備份signdomsMOEANew_many-features 
 set orgName=經濟部 
-set programName=workspace_MOA_MOEA
+set programName=MOADoms_MOEA
 set serverName=wildfly-21.0.0.Final_MOEA
-set mssqlDbName=signdomsMOEANew、signdomsAOC
+set mssqlDbName=signdomsMOEANew、signdomsMOEANew_many-features、signdomsAOC
 call :backup
 
 rem 2024.10.07 增加備份個資處 
+rem 2026.08.18 調整程式目錄 
 set orgName=個資處 
-set programName=workspace_PDPC
+set programName=MOADoms_PDPC
 set serverName=wildfly-21.0.0.Final_PDPC
 set mssqlDbName=signdomsPDPC
 call :backup
@@ -93,8 +101,9 @@ set mssqlDbName=moeaoa
 call :backup
 
 rem 2026.05.07 增加備份經濟部OA_docker 
+rem 2026.08.03 調整程式目錄 
 set orgName=經濟部OA_docker 
-set programName=workspace_OASystem_JDK17_docker
+set programName=OASystem_MOEA_docker
 set serverName=wildfly-28.0.1.Final_MOEA_OA_docker
 set postgresDbName=moeaoa
 call :backup
@@ -102,15 +111,17 @@ call :backup
 rem 2025.02.07 增加備份衛福部OA 
 rem 2025.05.27 調整資料庫名稱 
 rem 2026.01.23 調整資料庫名稱 
+rem 2026.08.04 調整程式目錄 
 set orgName=衛福部OA 
-set programName=workspace_OASystem_JDK21
+set programName=OASystem_MOHW
 set serverName=wildfly-34.0.0.Final_MOHW_OA
 set mssqlDbName=mohwoa
 call :backup
 
 rem 2025.10.21 增加備份經濟部EM 
+rem 2026.08.04 調整程式目錄 
 set orgName=經濟部EM 
-set programName=workspace_EMSystem
+set programName=EMSystem_MOEA
 set serverName=wildfly-37.0.1.Final_MOEA_EM
 set mssqlDbName=moeaem
 call :backup
@@ -123,6 +134,11 @@ call :copyFile
 rem 2026.06.12 增加備份batch資料 
 set copyFilePath=D:\Tools\BC
 set copyFileName=batch
+call :copyFile
+
+rem 2026.08.19 增加備份cursorSetting資料 
+set copyFilePath=D:\Tools\BC
+set copyFileName=cursorSetting
 call :copyFile
 
 rem 2026.05.07 增加備份docker資料 

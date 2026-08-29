@@ -74,15 +74,16 @@
 	* `筆電開機後要先開啟的應用程式_com.xml`
 
 * svnUpdate_com.bat`(公司用)`：
-	* 更新本地svn、執行成功後會執行svnUpdateToRemoteGit_com.bat
+	* 更新本地svn、執行成功後會執行svnUpdateToGit_com.bat
 	* 本地svn程式位置不同時，svnExe要更新
 	* 要更新的資料夾位置不同時，updateRootFile要更新
 	* 排程：平日09:00、14:30執行，錯過後會盡快執行
 	* `更新SVN_com.xml`
 
-* svnUpdateToRemoteGit_com.bat`(公司用)`：
-	* 同步本地svn變更至遠端git
-	* 遠端git位置不同時，gitDirPath要更新
+* svnUpdateToGit_com.bat`(公司用)`：
+	* 同步本地svn至git
+	* 遠端git位置不同時，remoteGitDirPath要更新
+	* 本地git位置不同時，localGitDirPath要更新
 
 * util.bat：
 	* bat功能大集合

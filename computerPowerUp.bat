@@ -58,7 +58,7 @@ if %isOpenQ-dir% equ true (
 rem 開啟bcompare 
 if %isOpenBcompare% equ true (
     set bcompareExe=D:\Beyond Compare 4\BCompare.exe
-	set cloudDir=H:\我的雲端硬碟\programWorkspace
+	set cloudDir=H:\我的雲端硬碟
 	rem 2024.10.06 參考開啟eclipse方式，確保開啟順序且不會中途卡住 
 	rem 2024.10.06 增加batch 
 	rem 2025.01.18 更換alms目錄 
@@ -67,12 +67,16 @@ if %isOpenBcompare% equ true (
 	rem 2026.02.07 間隔時間調整為5秒 
 	rem 2026.03.16 batch增加cloud，當有連接到雲端時 
 	rem 2026.08.01 alms增加cloud，當有連接到雲端時 
+	rem 2026.08.29 調整比對名稱 
 	if exist "!cloudDir!" (
 		start "" /min "!bcompareExe!" "cloud <--> alms" && timeout /t 5 /nobreak>nul
-		start "" /min "!bcompareExe!" "cloud <--> batch" && timeout /t 5 /nobreak>nul
+		rem start "" /min "!bcompareExe!" "batch <--> batch-dev" && timeout /t 5 /nobreak>nul
+		start "" /min "!bcompareExe!" "cloud <--> batch-dev" && timeout /t 5 /nobreak>nul
+		rem start "" /min "!bcompareExe!" "cloud <--> antigravity" && timeout /t 5 /nobreak>nul
+		rem start "" /min "!bcompareExe!" "cloud <--> cursor" && timeout /t 5 /nobreak>nul
+		rem start "" /min "!bcompareExe!" "cloud <--> zed" && timeout /t 5 /nobreak>nul
+		rem start "" /min "!bcompareExe!" "cloud <--> powershell" && timeout /t 5 /nobreak>nul
 	)
-	rem start "" /min "!bcompareExe!" "cloud <--> cursorSetting" && timeout /t 5 /nobreak>nul
-	rem start "" /min "!bcompareExe!" "cloud <--> antigravitySetting" && timeout /t 5 /nobreak>nul
 )
 
 rem 開啟chrome 
