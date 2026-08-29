@@ -24,7 +24,7 @@ if "!updateFile!" equ "" (
 )else (
 	echo 正在更新本地svn... 
 	"%svnExe%" /command:update /path:"!updateFile!" /closeonend:2
-	rem 2026.07.31 增加同步本地svn變更至遠端git 
-	call svnUpdateToRemoteGit_com.bat "true"
+	rem 2026.07.31 增加同步本地svn至git 
+	call svnUpdateToGit_com.bat "true"
 )
 endlocal
