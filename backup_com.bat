@@ -137,8 +137,14 @@ set copyFileName=batch
 call :copyFile
 
 rem 2026.08.19 增加備份cursorSetting資料 
+rem 2026.08.31 調整為ideSetting 
 set copyFilePath=D:\Tools\BC
-set copyFileName=cursorSetting
+set copyFileName=ideSetting
+call :copyFile
+
+rem 2026.08.31 增加備份cursorSetting資料 
+set copyFilePath=D:\Tools\BC
+set copyFileName=powershellSetting
 call :copyFile
 
 rem 2026.05.07 增加備份docker資料 
