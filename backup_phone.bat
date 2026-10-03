@@ -21,8 +21,24 @@ call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
 
 rem 備份写真 
 rem 2026.02.23 合併写真、映画為圖集 
+rem 2026.10.03 刪除手機資料夾內指定目錄的所有檔案 
 set fileName=圖集
 call util.bat "copyFile" "%backupRoot%" "%phoneFile%" "%fileName%"
+call :deletePhoneFile "上班"
+call :deletePhoneFile "人"
+call :deletePhoneFile "可愛生物"
+call :deletePhoneFile "教召"
+call :deletePhoneFile "日本語"
+call :deletePhoneFile "暫時"
+call :deletePhoneFile "桌面UI"
+call :deletePhoneFile "梗圖"
+call :deletePhoneFile "正妹吧"
+call :deletePhoneFile "程式"
+call :deletePhoneFile "程式畫畫"
+call :deletePhoneFile "美景"
+call :deletePhoneFile "色々"
+call :deletePhoneFile "雜項"
+call :deletePhoneFile "黃姓祖先"
 
 rem 備份映画 
 rem 2026.02.23 合併写真、映画為圖集 
@@ -46,3 +62,15 @@ if exist "%msgExe%" (
 	pause>nul
 )
 exit
+
+rem 刪除手機資料夾內指定目錄的所有檔案(參數1為指定目錄的名稱) 
+:deletePhoneFile
+set deleteDir=%phoneFile%\%fileName%\%~1
+if exist "%deleteDir%" (
+	echo 開始刪除【%deleteDir%】內的檔案...
+	rem 整個刪除後重建同名空目錄，達到清空內容、保留目錄 
+	rd /s /q "%deleteDir%"
+	mkdir "%deleteDir%"
+	echo 【%deleteDir%】內的檔案刪除完畢
+)
+goto :eof

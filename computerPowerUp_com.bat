@@ -66,6 +66,7 @@ if %isOpenEclipse% equ true (
 		rem 2024.12.16 修正無法切換到d槽的問題 
 		rem 2025.02.07 增加衛福部OA 
 		rem 2025.10.21 增加經濟部EM 
+		rem 2026.09.30 增加國發會_export_pdf 
 		cd /d "!openEclipseBatDir!"
 		rem call "農業部.bat" && timeout /t 10 /nobreak>nul
 		rem call "智慧局.bat" && timeout /t 10 /nobreak>nul
@@ -78,6 +79,7 @@ if %isOpenEclipse% equ true (
 		rem call "經濟部OA.bat" && timeout /t 10 /nobreak>nul
 		rem call "衛福部OA.bat" && timeout /t 10 /nobreak>nul
 		rem call "經濟部EM.bat" && timeout /t 10 /nobreak>nul
+		rem call "國發會_export_pdf.bat" && timeout /t 10 /nobreak>nul
 		cd "%~dp0"
 	)
 )
@@ -90,6 +92,7 @@ if %isOpenCursor% equ true (
 		rem 2026.03.16 不知道為什麼換成start "" /b cmd /c才開得了 
 		rem 2026.05.07 增加經濟部OA_docker 
 		rem 2026.08.18 增加設定檔 
+		rem 2026.09.30 增加國發會_export_pdf 
 		cd /d "!openCursorBatDir!"
 		rem start "" /b cmd /c "cursor_農業部.bat" && timeout /t 5 /nobreak>nul
 		start "" /b cmd /c "cursor_智慧局.bat" && timeout /t 5 /nobreak>nul
@@ -97,12 +100,13 @@ if %isOpenCursor% equ true (
 		rem start "" /b cmd /c "cursor_國發會.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_國發會_111增修.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_農險基金.bat" && timeout /t 5 /nobreak>nul
-		start "" /b cmd /c "cursor_經濟部.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_經濟部.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_個資處.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_經濟部OA.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_經濟部OA_docker.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_衛福部OA.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_經濟部EM.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "cursor_國發會_export_pdf.bat" && timeout /t 5 /nobreak>nul
 		start "" /b cmd /c "MOADoms.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "OASystem.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "EMSystem.bat" && timeout /t 5 /nobreak>nul

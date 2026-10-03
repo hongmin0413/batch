@@ -13,7 +13,8 @@ set mssqlBackupRoot=D:\DB\SQL2022\Backup
 set sqlcmdPath=C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\SQLCMD.EXE
 rem 2026.05.25 調整db容器化後的指令開頭寫法 
 set dockerBackupRoot=D:\APPS\docker\DB\backup
-set postgresInDocker=docker exec -i postgres-17.9-alpine3.23
+rem 2026.09.24 調整postgres容器名稱 
+set postgresInDocker=docker exec -i postgres-18.6-alpine
 set psqlPath=/usr/local/bin/psql
 set pgDumpPath=/usr/local/bin/pg_dump
 rem 讀取config.ini並設為參數
@@ -60,6 +61,13 @@ set orgName=國發會
 set programName=MOADoms_NDC
 set serverName=wildfly-10.0.0.Final_NDC
 set mssqlDbName=signdoms27、signdoms27_many-features、VANS_CI
+call :backup
+
+rem 2026.09.24 增加備份國發會_export_pdf 
+set orgName=國發會 
+set programName=MOADoms_NDC_export_pdf
+set serverName=wildfly-21.0.2.Final_NDC_export_pdf
+set mssqlDbName=
 call :backup
 
 rem 備份國發會_111增修 
