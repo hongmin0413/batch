@@ -134,7 +134,7 @@ rem set "mysqlInfo=%mysqlInfo1%"
 rem set mysqlDbName=library 
 rem call util.bat "backupMysql" "%mysqlInfo%" "%mysqlDbName%" "mysql" 
 set "mysqlInfo=%tidbInfo1%"
-set mysqlDbName=ALMS、ALMS_dev_revise_setUpAccount
+set mysqlDbName=ALMS
 call util.bat "backupMysql" "%mysqlInfo%" "%mysqlDbName%" "tidb"
 set fileName=docker
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
