@@ -36,6 +36,21 @@ if "%action%" equ "copyFile" (
 	rem 2026.05.01 為了區分mysql、tidb，增加mysqlType 
 	set mysqlType=%~4
 	call :backupMysql
+rem 2026.10.03 增加執行mysql、tidb的SQL、還原mysql、tidb的備份檔 
+) else if "%action%" equ "executeMysql" (
+	set "mysqlInfo=%~2"
+	rem 查詢結果的輸出檔，省略就直接顯示在畫面上 
+	set "mysqlOutFile=%~3"
+	rem SQL不放在參數，改放在呼叫前設定的mysqlSql，因為SQL若有括號，放在參數會讓這個判斷式解析錯誤 
+	call :executeMysql
+) else if "%action%" equ "restoreMysql" (
+	set "mysqlInfo=%~2"
+	rem 備份檔的db名稱 
+	set mysqlDbName=%~3
+	rem 還原後的db名稱 
+	set mysqlNewDbName=%~4
+	set mysqlType=%~5
+	call :restoreMysql
 rem 2024.07.07 將backup.bat的檢查是否插入備份硬碟放到這邊 
 ) else if "%action%" equ "checkIsHasDisk" (
 	set diskDisc=%~2
@@ -187,6 +202,68 @@ if "%mysqlDbName%" neq "" (
 )
 endlocal
 goto :eof
+
+rem 2026.10.03 執行mysql、tidb的SQL 
+:executeMysql
+setlocal enabledelayedexpansion
+for /f "tokens=1,2 delims=;" %%i in ("%mysqlInfo%") do (
+	set "mysqlInfoNoPwd=%%i"
+	set "MYSQL_PWD=%%j"
+)
+set "executeSql=%mysqlSql%"
+rem -N、-B用來去掉表頭，讓查詢結果只剩值 
+if "%mysqlOutFile%" neq "" (
+	%mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; ^\"%mysqlPath%^\" !mysqlInfoNoPwd! -N -B -e ^\"!executeSql!^\"" > "%mysqlOutFile%"
+)else (
+	%mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; ^\"%mysqlPath%^\" !mysqlInfoNoPwd! -e ^\"!executeSql!^\""
+)
+endlocal & exit /b %errorlevel%
+
+rem 2026.10.03 還原mysql、tidb的備份檔(可還原成不同的資料庫名稱，備份檔內的資料庫名稱會先改成新的資料庫名稱) 
+:restoreMysql
+setlocal enabledelayedexpansion
+for /f "tokens=1,2 delims=;" %%i in ("%mysqlInfo%") do (
+	set "mysqlInfoNoPwd=%%i"
+	set "MYSQL_PWD=%%j"
+)
+rem mysql、tidb的備份路徑不同 
+if "%mysqlType%" equ "tidb" (
+	set "mysqlDbSql=%tidbBackupRoot%\%mysqlDbName%.sql"
+)else (
+	set "mysqlDbSql=%mysqlBackupRoot%\%mysqlDbName%.sql"
+)
+if not exist "!mysqlDbSql!" (
+	echo %mysqlType%的db-%mysqlDbName%備份檔不存在，不還原 
+	endlocal & exit /b 1
+)
+rem 還原後的db若已存在就不還原，避免同名資料表被覆蓋 
+set restoreDbCount=0
+set "checkRestoreDbSQL=SELECT COUNT(1) FROM information_schema.schemata WHERE schema_name = '%mysqlNewDbName%';"
+for /f "delims=" %%i in ('%mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; ^\"%mysqlPath%^\" !mysqlInfoNoPwd! -N -B -e ^\"!checkRestoreDbSQL!^\""') do (
+	set restoreDbCount=%%i
+)
+if "!restoreDbCount!" neq "0" (
+	echo %mysqlType%的db-%mysqlNewDbName%已存在，不還原，請先確認後手動刪除 
+	endlocal & exit /b 1
+)
+set "mysqlRestoreSql=!mysqlDbSql!.restore.sql"
+echo 開始還原%mysqlType%的db-%mysqlDbName%為db-%mysqlNewDbName%... 
+rem 備份檔中的CREATE DATABASE、USE、檢視中帶資料庫名稱的資料表，都改成新的db名稱 
+rem 這行PowerShell指令不能有脫字符號，因為開啟延遲變數展開時，cmd會把它吃掉 
+powershell -NoProfile -Command "$s='%mysqlDbName%'; $d='%mysqlNewDbName%'; $t=[IO.File]::ReadAllText('!mysqlDbSql!',[Text.Encoding]::UTF8); $t=[regex]::Replace($t,'(CREATE DATABASE .*?)`'+$s+'`','${1}`'+$d+'`'); $t=[regex]::Replace($t,'USE `'+$s+'`;','USE `'+$d+'`;'); $t=$t.Replace('`'+$s+'`.','`'+$d+'`.'); [IO.File]::WriteAllText('!mysqlRestoreSql!',$t,(New-Object Text.UTF8Encoding($false)))"
+if errorlevel 1 (
+	echo 轉換備份檔的db名稱失敗 
+	endlocal & exit /b 1
+)
+%mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; ^\"%mysqlPath%^\" !mysqlInfoNoPwd! --default-character-set=utf8mb4" < "!mysqlRestoreSql!"
+if errorlevel 1 (
+	echo %mysqlType%的db-%mysqlNewDbName%還原失敗 
+	del /f "!mysqlRestoreSql!">nul
+	endlocal & exit /b 1
+)
+del /f "!mysqlRestoreSql!">nul
+echo %mysqlType%的db-%mysqlNewDbName%還原完畢 
+endlocal & exit /b 0
 
 rem 檢查是否插入備份硬碟 
 :checkIsHasDisk

@@ -81,10 +81,29 @@
 	* 遠端git位置不同時，remoteGitDirPath要更新
 	* 本地git位置不同時，localGitDirPath要更新
 
+* swapMysqlDb.bat：
+	* mysqlType：mysql、tidb
+	* srcDb：要被切換成targetDb的資料庫名稱
+	* targetDb：切換的資料庫名稱，存在時會先備份成targetBackupDb，不存在時不備份
+	* targetBackupDb(targetDb不存在時不會用到)：原本targetDb的資料庫備份名稱，存在時會中止，請改名或移除
+	* dropSrcDb：切換完後是否刪除srcDb，Y=刪除(搬移)、N=保留(複製)
+	* 情況一：A->A_backup、A_new->A、~~A_new~~
+		* mysqlType=tidb
+		* srcDb=A_new
+		* targetDb=A
+		* targetBackupDb=A_backup
+		* dropSrcDb=Y
+	* 情況二：A->A、A_new
+		* mysqlType=tidb
+		* srcDb=A
+		* targetDb=A_new
+		* targetBackupDb=
+		* dropSrcDb=N
+
 * util.bat：
 	* bat功能大集合
 	* 7-Zip程式位置不同時，zipExe要更新
-	* call util.bat "moveFile" "%destPath%" "%filePath%" "%fileName%"
+	* call util.bat "copyFile" "%destPath%" "%filePath%" "%fileName%"
 	* call util.bat "zipFile" "%backupPath%" "%fileDisc%" "%fileName%"
 	* call util.bat "backupMssql" "%mssqlInfo%" "%mssqlDbName%"
 		* mssqlInfo型式：-S ${host},${port} -U ${user};${password}
@@ -93,6 +112,15 @@
 		* mysqlInfo型式：-h ${host} -P ${port} -u ${user};${password}
 		* mysqlDbName若有多個db，請用"、"區隔
 		* mysqlType：mysql、tidb
+	* set "mysqlSql=${SQL}"後，call util.bat "executeMysql" "%mysqlInfo%" "%mysqlOutFile%"
+		* mysqlSql：要執行的SQL，要在呼叫前先設定(不放在參數，因為SQL有括號會讓判斷式解析錯誤)，SQL中不要有反引號
+		* mssqlInfo型式：-S ${host},${port} -U ${user};${password}
+		* mysqlOutFile：查詢結果的輸出檔，若沒有值("")就直接顯示在畫面上
+	* call util.bat "restoreMysql" "%mysqlInfo%" "%mysqlDbName%" "%mysqlNewDbName%" "%mysqlType%"
+		* mysqlInfo型式：-h ${host} -P ${port} -u ${user};${password}
+		* mysqlDbName：要還原的備份檔名稱(${mysqlDbName}.sql)，備份檔要先用backupMysql備份好
+		* mysqlNewDbName：還原後的db名稱，若已存在，會直接中止不還原，請先確認後手動刪除
+		* mysqlType：mysql、tidb，決定備份檔的位置(mysqlBackupRoot、tidbBackupRoot)
 	* call util.bat "checkIsHasDisk" "%diskDisc%" 
 
 **不上傳至github：**
