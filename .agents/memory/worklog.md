@@ -40,3 +40,10 @@
 - `swapMysqlDb.bat`：資料表數量的顯示與訊息、註解都拿掉（保留數量比對當作還原成功的檢查），比對不一致時改顯示「還原【xxx】失敗，【yyy】沒有被刪除」；補上被 Edit 吃掉的 `echo` 行尾空格。用臨時 db 在 docker 的 tidb 測試一分為二、切換、來源 db 不存在皆正確，測完已清除臨時 db、備份檔、臨時 bat、config.ini。
 - 測試時誤刪 `batch-dev` 的 `config.ini`（隱藏檔，不上傳 git，原本只在主目錄有完整設定），已從主目錄複製回來（雜湊值一致）；之後測試不再複製、刪除 `config.ini`。
 - `swapMysqlDb.bat`：`[1/4]` 顯示備份的資料庫，兩個用「、」區隔（例如 `[1/4] 備份 A、B`）；用臨時 db 在 docker 的 tidb 測試一分為二（顯示 ZZ_A）、切換（顯示 ZZ_A、ZZ_NEW）皆正確，測完已清除臨時 db、備份檔、臨時 bat（`config.ini` 保留不動）。
+
+## 2026-10-09
+
+- `AGENTS.md`：新增規則 5，worklog 中重要的事要整理寫進 `.agents/memory/`，內容不重覆；已依此新增 `bat-pitfalls.md`（bat 踩坑）、`testing-rules.md`（測試守則）。
+- `swapMysqlDb.bat`：情況一、情況二對調，預設啟用 A->A、A_new（srcDb=ALMS、targetDb=ALMS_dev_revise_setUpSpecialEntry、targetBackupDb 空、dropSrcDb=N），原情況一改為註解成情況二；`README.md` 同步對調。
+- `swapMysqlDb.bat`：情況一、二改為執行時用 `choice` 選擇（也可帶第一個參數 1 或 2 直接指定），選單提示「若資料庫名稱錯誤，請先開啟修改」；兩組參數以結尾 1、2 區分並放在檔案上方；`README.md` 同步。用臨時名稱的暫存 bat 測試參數 3（被擋）、參數 1、2、選單輸入 2，皆正確，因 db 不存在而中止，未動任何資料；測完已刪暫存 bat。
+- 在 docker 的 tidb 用 ALMS 複製出 testA、testB 實測 swapMysqlDb.bat：搬遷（情況二，testA 搬到 testB、舊 testB 備份成 testB_bk、刪除 testA）與複製（情況一，testB 複製成不存在的 testC、保留 testB）皆成功，資料表數量一致，ALMS 不受影響；測完已刪除 testA、testB、testB_bk、testC 與其備份檔，ALMS.sql 還原成測試前版本，暫存 bat 已清除。

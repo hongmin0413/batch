@@ -1,19 +1,38 @@
 @echo off
 chcp 65001>nul
 
-rem 情況一：A->A_backup、A_new->A、~~A_new~~ 
-set mysqlType=tidb
-set srcDb=ALMS_dev_revise_setUpAccount
-set targetDb=ALMS
-set targetBackupDb=ALMS_backup
-set dropSrcDb=Y
+rem 情況一：A->A、A_new 
+set mysqlType1=tidb
+set srcDb1=ALMS
+set targetDb1=ALMS_dev_revise_setUpSpecialEntry
+set targetBackupDb1=
+set dropSrcDb1=N
 
-rem 情況二：A->A、A_new 
-rem set mysqlType=tidb
-rem set srcDb=ALMS
-rem set targetDb=ALMS_dev_revise_setUpAccount
-rem set targetBackupDb=
-rem set dropSrcDb=N
+rem 情況二：A->A_backup、A_new->A、~~A_new~~ 
+set mysqlType2=tidb
+set srcDb2=ALMS_dev_revise_setUpSpecialEntry
+set targetDb2=ALMS
+set targetBackupDb2=ALMS_backup
+set dropSrcDb2=Y
+
+rem 第一個參數可直接指定情況，沒給就顯示選單 
+set scene=%~1
+if "%scene%" neq "" goto :setScene
+echo 請選擇情況（若資料庫名稱錯誤，請先開啟修改）： 
+echo   1. %srcDb1% -^> %targetDb1%（保留 %srcDb1%） 
+echo   2. %targetDb2% -^> %targetBackupDb2%，%srcDb2% -^> %targetDb2%（刪除 %srcDb2%） 
+choice /c 12 /n /m "請輸入 1 或 2： "
+if errorlevel 2 (set scene=2) else (set scene=1)
+:setScene
+if "%scene%" neq "1" if "%scene%" neq "2" (
+	echo 情況只能是 1 或 2 
+	goto :fail
+)
+call set mysqlType=%%mysqlType%scene%%%
+call set srcDb=%%srcDb%scene%%%
+call set targetDb=%%targetDb%scene%%%
+call set targetBackupDb=%%targetBackupDb%scene%%%
+call set dropSrcDb=%%dropSrcDb%scene%%%
 
 cd /d "%~dp0"
 rem 讀取config.ini並設為參數 

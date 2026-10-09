@@ -82,23 +82,24 @@
 	* 本地git位置不同時，localGitDirPath要更新
 
 * swapMysqlDb.bat：
+	* 執行時選擇情況一或二（也可帶參數直接指定，在後面寫1 or 2）
 	* mysqlType：mysql、tidb
 	* srcDb：要被切換成targetDb的資料庫名稱
 	* targetDb：切換的資料庫名稱，存在時會先備份成targetBackupDb，不存在時不備份
 	* targetBackupDb(targetDb不存在時不會用到)：原本targetDb的資料庫備份名稱，存在時會中止，請改名或移除
 	* dropSrcDb：切換完後是否刪除srcDb，Y=刪除(搬移)、N=保留(複製)
-	* 情況一：A->A_backup、A_new->A、~~A_new~~
-		* mysqlType=tidb
-		* srcDb=A_new
-		* targetDb=A
-		* targetBackupDb=A_backup
-		* dropSrcDb=Y
-	* 情況二：A->A、A_new
+	* 情況一：A->A、A_new
 		* mysqlType=tidb
 		* srcDb=A
 		* targetDb=A_new
 		* targetBackupDb=
 		* dropSrcDb=N
+	* 情況二：A->A_backup、A_new->A、~~A_new~~
+		* mysqlType=tidb
+		* srcDb=A_new
+		* targetDb=A
+		* targetBackupDb=A_backup
+		* dropSrcDb=Y
 
 * util.bat：
 	* bat功能大集合
