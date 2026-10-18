@@ -67,3 +67,18 @@
 - Zed keymap：移除 `f3`（git diff 改用 SourceGit），只保留 `f4`（Beyond Compare）。SourceGit：外部比對工具改為無（`ExternalMergeToolType` 0，路徑與參數清空），因已改用並排 diff。
 - SourceGit：試將 `IsSidebarCollapsedInLocalChanges` 改為 `true`（嘗試隱藏左邊欄，效果待使用者確認；找不到官方的整個左邊欄隱藏開關）。
 - SourceGit：`UseFullTextDiff` 改為 `true`（diff 顯示完整檔案）。
+
+## 2026-10-18
+
+- Zed 全域設定：新增 `ensure_final_newline_on_save: true`；專案 `.zed\settings.json` 的同名設定（false）移除，避免蓋掉全域。
+- SourceGit：`data\preference.json` 的 `Workspaces.Repositories` 補滿 9 個 `D:/githubWorkspace` 下的 repo（SourceGit 執行中改檔，關閉時可能被覆蓋，需先關閉再改或改完重開）。
+- 踩坑：用 PowerShell 改 SourceGit 的 `preference.json` 時，先讀檔失敗導致寫入空檔；已用 `%APPDATA%\SourceGit\preference.json` 重建並套回先前調整（視窗非最大化、並排 diff、完整 diff、無外部比對工具、側欄收合）。改設定檔前要先備份，且讀取失敗不可寫檔。
+- SourceGit：9 個 repo 應寫在 `RepositoryNodes`（開新分頁時可選），`Workspaces.Repositories` 只放平常開著的 alms、batch、batch-dev（先前誤寫成 9 個，已更正）。SourceGit 關閉時會用記憶體內容覆蓋 `preference.json`，改檔前要確認程式已關閉。
+- `computerPowerUp.bat`、`computerPowerUp_com.bat`：增加 `isOpenSourceGit` 開關與開啟 SourceGit（路徑對應 backup：本機 `D:\SourceGit`、公司 `D:\Tools\BC\SourceGit`）。
+- 複製 `D:\SourceGit` 為 `D:\SourceGit_com`（排除 `process.lock`，SourceGit 當時執行中），其 `data\preference.json` 的 `RepositoryNodes` 依 `svnUpdateToGit_com.bat` 寫入 12 個 repo（不寫 CurrentBranch），`Workspaces` 依序為國發會（`MOADoms_NDC`）、MOADoms、OASystem、EMSystem 設定檔。
+- `computerPowerUp.bat`、`computerPowerUp_com.bat`：`isOpenSourceGit` 變數與開啟區塊都移到 Zed 之後（過程中用 Edit 工具改 bat 會吃掉行尾空格且檔案為 CRLF，改完用 PowerShell 補回行尾空格、移除重複區塊）。
+- 把 `D:\githubWorkspace\01_開啟程式編輯器` 的 `cursor`、`zed` 複製到專案 `開啟程式編輯器\`（非隱藏），README 補上使用說明。
+- 改為只保留 `openIde\` 目錄：`openCursor.bat`、`openZed.bat`、`openIde_example.bat`（兩個 call 先註解），移除先前複製的 `開啟程式編輯器`，README 精簡。
+- 新增 `openIde\README.md`（仿 gitBatch 的格式：檔案結構說明、操作流程），根目錄 README 的 openIde 段改為參照它。
+- `openIde_example.bat`：移除說明註解（說明已在 `openIde\README.md`），只留兩個被註解的 call。
+- `openIde\README.md`：新專案步驟補上「刪除不用的 call」。

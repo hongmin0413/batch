@@ -150,9 +150,14 @@ set copyFilePath=D:\Tools\BC
 set copyFileName=ideSetting
 call :copyFile
 
-rem 2026.08.31 增加備份cursorSetting資料 
+rem 2026.08.31 增加備份powershellSetting資料 
 set copyFilePath=D:\Tools\BC
 set copyFileName=powershellSetting
+call :copyFile
+
+rem 2026.10.18 增加備份SourceGit資料 
+set copyFilePath=D:\Tools\BC
+set copyFileName=SourceGit
 call :copyFile
 
 rem 2026.05.07 增加備份docker資料 

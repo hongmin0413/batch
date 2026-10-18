@@ -2,6 +2,9 @@
 * gitBatch/XXX.bat：
 	* 參照gitBatch/README.md
 
+* openIde/XXX.bat：
+	* 參照openIde/README.md
+
 * backup.bat：
 	* 備份重要資料至硬碟中
 	* 備份位置不同時，util.bat的mssqlBackupRoot、mysqlBackupRoot、tidbBackupRoot要更新

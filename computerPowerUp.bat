@@ -2,8 +2,9 @@
 chcp 65001>nul
 
 rem 是否開啟應用程式的布林值 
-set isOpenCursor=true
-set isOpenZed=true
+set isOpenCursor=false
+set isOpenZed=false
+set isOpenSourceGit=true
 set isOpenQ-dir=true
 set isOpenBcompare=true
 set isOpenChrome=false
@@ -55,7 +56,12 @@ if %isOpenZed% equ true (
 	)
 )
 
-rem 開啟Q-dir 
+rem 2026.10.18 增加開啟SourceGit 
+if %isOpenSourceGit% equ true (
+	start "" /min "D:\SourceGit\SourceGit.exe" 
+)
+
+rem 開啟Q-dir
 if %isOpenQ-dir% equ true (
 	start "" /min "D:\Q-Dir\Q-Dir.exe" 
 )
@@ -85,7 +91,7 @@ if %isOpenBcompare% equ true (
 
 rem 開啟chrome 
 if %isOpenChrome% equ true (
-	start "" /min "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" 
+	start "" /min "C:\Program Files\Google\Chrome\Application\chrome.exe" 
 )
 
 rem 開啟edge 

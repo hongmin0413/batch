@@ -6,7 +6,9 @@ set isOpenVirtuaWin=true
 set isOpenQ-dir=true
 set isOpenBcompare=true
 set isOpenEclipse=false
-set isOpenCursor=true
+set isOpenCursor=false
+set isOpenZed=false
+set isOpenSourceGit=true
 set isOpenChrome=false
 set isOpenEdge=true
 set isOpenNotepad=true
@@ -93,6 +95,7 @@ if %isOpenCursor% equ true (
 		rem 2026.05.07 增加經濟部OA_docker 
 		rem 2026.08.18 增加設定檔 
 		rem 2026.09.30 增加國發會_export_pdf 
+		rem 2026.10.18 設定檔改用zed開啟 
 		cd /d "!openCursorBatDir!"
 		rem start "" /b cmd /c "cursor_農業部.bat" && timeout /t 5 /nobreak>nul
 		start "" /b cmd /c "cursor_智慧局.bat" && timeout /t 5 /nobreak>nul
@@ -107,6 +110,16 @@ if %isOpenCursor% equ true (
 		rem start "" /b cmd /c "cursor_衛福部OA.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_經濟部EM.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "cursor_國發會_export_pdf.bat" && timeout /t 5 /nobreak>nul
+		cd "%~dp0"
+	)
+)
+
+rem 開啟zed 
+rem 2026.10.18 參考開啟cursor方式 
+if %isOpenZed% equ true (
+	set openZedBatDir=D:\workspace\開啟程式編輯器
+	if exist "!openZedBatDir!" (
+		cd /d "!openZedBatDir!"
 		start "" /b cmd /c "MOADoms.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "OASystem.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "EMSystem.bat" && timeout /t 5 /nobreak>nul
@@ -114,7 +127,12 @@ if %isOpenCursor% equ true (
 	)
 )
 
-rem 開啟chrome 
+rem 2026.10.18 增加開啟SourceGit 
+if %isOpenSourceGit% equ true (
+	start "" /min "D:\Tools\BC\SourceGit\SourceGit.exe" 
+)
+
+rem 開啟chrome
 if %isOpenChrome% equ true (
 	start "" /min "C:\Program Files\Google\Chrome\Application\chrome.exe"
 )
