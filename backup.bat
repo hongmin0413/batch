@@ -191,6 +191,10 @@ rem 備份Q-Dir
 set fileName=Q-Dir
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
+rem 2026.10.18 增加備份SourceGit 
+set fileName=SourceGit
+call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+
 rem 2025.07.07 增加備份VirtuaWin_portable_4.5 
 set fileName=VirtuaWin_portable_4.5
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"

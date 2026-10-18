@@ -47,3 +47,23 @@
 - `swapMysqlDb.bat`：情況一、情況二對調，預設啟用 A->A、A_new（srcDb=ALMS、targetDb=ALMS_dev_revise_setUpSpecialEntry、targetBackupDb 空、dropSrcDb=N），原情況一改為註解成情況二；`README.md` 同步對調。
 - `swapMysqlDb.bat`：情況一、二改為執行時用 `choice` 選擇（也可帶第一個參數 1 或 2 直接指定），選單提示「若資料庫名稱錯誤，請先開啟修改」；兩組參數以結尾 1、2 區分並放在檔案上方；`README.md` 同步。用臨時名稱的暫存 bat 測試參數 3（被擋）、參數 1、2、選單輸入 2，皆正確，因 db 不存在而中止，未動任何資料；測完已刪暫存 bat。
 - 在 docker 的 tidb 用 ALMS 複製出 testA、testB 實測 swapMysqlDb.bat：搬遷（情況二，testA 搬到 testB、舊 testB 備份成 testB_bk、刪除 testA）與複製（情況一，testB 複製成不存在的 testC、保留 testB）皆成功，資料表數量一致，ALMS 不受影響；測完已刪除 testA、testB、testB_bk、testC 與其備份檔，ALMS.sql 還原成測試前版本，暫存 bat 已清除。
+
+## 2026-10-17
+
+- 新增 worktree `batch-dev-zed`（分支 `zed`，從 `dev` 建立）用來試用 Zed 編輯器；新增 `.zed/settings.json`：關閉存檔時刪除行尾空格（AGENTS.md 規則 4 需要）、關閉存檔時自動補結尾換行與格式化、換行符號用 `detect`（維持 bat 的 CRLF）。
+- 寫入 Zed 全域設定（`%APPDATA%\Zed\settings.json`、`keymap.json`，不在專案內）：比照 Cursor 的版面、字體、autosave、快捷鍵，並加入 Java（jdtls）設定與自動安裝擴充；原設定備份在暫存目錄。其他專案（alms）只讀取參考，未修改。
+- 整理 `D:\githubWorkspace\01_開啟程式編輯器\`：刪除 agy 相關 bat（`*_agy.bat`、`openAntigravity.bat`）；其餘 bat 移到 `cursor\`，並在 `zed\` 新增 `openZed.bat` 與各專案 bat（含 alms，之後再切換）。
+- `computerPowerUp.bat`：拿掉 Antigravity，改成 `isOpenZed=true`（最上方），Zed 區塊內各專案先全部註解；cursor 區塊目錄改指向 `cursor\`；比對區塊移除 antigravity 那行。
+- Zed 全域設定調整：keymap 註解照使用者原本寫法、移除 git 相關按鍵（改用 SourceGit）、新增 `f4`（Beyond Compare 比較）與全域 `tasks.json`；設定檔不再提到 Cursor、移除 `base_keymap`；關閉 `git.inline_blame`。
+- SourceGit（`D:\SourceGit`）：在 exe 同層建立 `data` 資料夾（portable 模式）並放入 `preference.json`，同時把 `UseSystemWindowFrame` 改為 `true`（改善最大化時蓋住自動隱藏工作列）；`%APPDATA%\SourceGit` 原檔保留，另備份一份在暫存目錄；已執行 `ie4uinit.exe -show` 重整圖示快取。
+- Zed 全域設定：`minimap.show` 改為 `never`（關閉右側縮圖）。SourceGit：`UseSystemWindowFrame` 在 Windows 上會被程式改回 `false`，改為把 `data\preference.json` 的視窗改成非最大化（`LauncherWindowState` 0、`LauncherHeight` 790、`LauncherPositionY` 0），讓螢幕下緣留空隙以便叫出自動隱藏的工作列；`data\` portable 模式確認有效。
+- Zed 的 `f4`（Beyond Compare 比較）沒反應，改為 task 呼叫 `%APPDATA%\Zed\compareFile.bat`（避免路徑空格問題），task 失敗時不自動隱藏。
+- Zed 的 `compare file with` task：`reveal` 設為 `never`、`hide` 設為 `always`，讓 powershell 終端機執行後自動關閉；選比較檔案只能在 Beyond Compare 內操作（Zed task 沒有輸入檔案的功能）。
+- Zed 的 `compare file with` task 改為直接用 `Start-Process` 開 Beyond Compare（寫在 `tasks.json`），不再用 `compareFile.bat`，已刪除該 bat；實測可用。
+- `backup.bat`：D 槽增加備份 `SourceGit`（設定已放在其 `data` 目錄下，一併備份）。
+- Zed 全域設定：關閉 git panel 按鈕；keymap 加回 `f3`（git diff）、`alt+h`（git history），註解照使用者原本寫法（git 圖形操作仍交給 SourceGit）。
+- Zed keymap：移除 `alt+h`（git history 改用 SourceGit）。
+- SourceGit：`data\preference.json` 的 `UseSideBySideDiff` 改為 `true`（diff 改左右並排）。
+- Zed keymap：移除 `f3`（git diff 改用 SourceGit），只保留 `f4`（Beyond Compare）。SourceGit：外部比對工具改為無（`ExternalMergeToolType` 0，路徑與參數清空），因已改用並排 diff。
+- SourceGit：試將 `IsSidebarCollapsedInLocalChanges` 改為 `true`（嘗試隱藏左邊欄，效果待使用者確認；找不到官方的整個左邊欄隱藏開關）。
+- SourceGit：`UseFullTextDiff` 改為 `true`（diff 顯示完整檔案）。

@@ -4,13 +4,13 @@ chcp 65001>nul
 rem 情況一：A->A、A_new 
 set mysqlType1=tidb
 set srcDb1=ALMS
-set targetDb1=ALMS_dev_revise_setUpSpecialEntry
+set targetDb1=ALMS_new
 set targetBackupDb1=
 set dropSrcDb1=N
 
 rem 情況二：A->A_backup、A_new->A、~~A_new~~ 
 set mysqlType2=tidb
-set srcDb2=ALMS_dev_revise_setUpSpecialEntry
+set srcDb2=ALMS_new
 set targetDb2=ALMS
 set targetBackupDb2=ALMS_backup
 set dropSrcDb2=Y

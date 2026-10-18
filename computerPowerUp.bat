@@ -3,7 +3,7 @@ chcp 65001>nul
 
 rem 是否開啟應用程式的布林值 
 set isOpenCursor=true
-set isOpenAntigravity=false
+set isOpenZed=true
 set isOpenQ-dir=true
 set isOpenBcompare=true
 set isOpenChrome=false
@@ -17,10 +17,11 @@ setlocal enabledelayedexpansion
 rem 開啟cursor 
 if %isOpenCursor% equ true (
 	rem 2026.02.07 調整為直接call另一個資料夾寫好的bat 
-	set openCursorDir=D:\githubWorkspace\01_開啟程式編輯器
+	rem 2026.10.18 bat依編輯器分到cursor、zed目錄 
+	set openCursorDir=D:\githubWorkspace\01_開啟程式編輯器\cursor
 	if exist "!openCursorDir!" (
 		rem 2025.06.20 調整開啟寫法，避免每次都拋錯 
-		rem 2026.03.15 參考開啟Antigravity，不知道為什麼換成start "" /b cmd /c才開得了 
+		rem 2026.03.15 不知道為什麼換成start "" /b cmd /c才開得了 
 		rem 2026.08.16 調整bat名稱 
 		cd /d "!openCursorDir!"
 		rem start "" /b cmd /c "ai-produce-sql-hex.bat" && timeout /t 5 /nobreak>nul
@@ -36,16 +37,20 @@ if %isOpenCursor% equ true (
 	)
 )
 
-rem 2026.02.07 增加開啟Antigravity 
-if %isOpenAntigravity% equ true (
-	set openAntigravityDir=D:\githubWorkspace\01_開啟程式編輯器
-	if exist "!openAntigravityDir!" (
-		rem 2026.02.20 不知道為什麼換成start "" /b cmd /c才開得了 
-		rem 2026.08.16 調整bat名稱 
-		cd /d "!openAntigravityDir!"
-		start "" /b cmd /c "alms_agy.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "check-national-id-number_agy.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "linebot-guess-number_agy.bat" && timeout /t 5 /nobreak>nul
+rem 2026.10.18 增加開啟Zed 
+if %isOpenZed% equ true (
+	set openZedDir=D:\githubWorkspace\01_開啟程式編輯器\zed
+	if exist "!openZedDir!" (
+		cd /d "!openZedDir!"
+		rem start "" /b cmd /c "ai-produce-sql-hex.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "ai-tool-hex.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "alms.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "batch.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "batch-dev.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "chat-talker-hex.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "check-national-id-number.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "linebot-guess-number.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "station-typing.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
 	)
 )
@@ -72,7 +77,6 @@ if %isOpenBcompare% equ true (
 		start "" /min "!bcompareExe!" "cloud <--> alms" && timeout /t 5 /nobreak>nul
 		rem start "" /min "!bcompareExe!" "batch <--> batch-dev" && timeout /t 5 /nobreak>nul
 		start "" /min "!bcompareExe!" "cloud <--> batch-dev" && timeout /t 5 /nobreak>nul
-		rem start "" /min "!bcompareExe!" "cloud <--> antigravity" && timeout /t 5 /nobreak>nul
 		rem start "" /min "!bcompareExe!" "cloud <--> cursor" && timeout /t 5 /nobreak>nul
 		rem start "" /min "!bcompareExe!" "cloud <--> zed" && timeout /t 5 /nobreak>nul
 		rem start "" /min "!bcompareExe!" "cloud <--> powershell" && timeout /t 5 /nobreak>nul
