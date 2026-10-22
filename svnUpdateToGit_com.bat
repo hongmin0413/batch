@@ -104,7 +104,8 @@ if "%gitName%" neq "" (
 		rem 2026.08.04 因應可能有多個遠端git，改為全部都commit過再執行同步至本地git 
 		if "!isHasCommit!" equ "true" (
 			cd /d "%localGitDirPath%"
-			pwsh -File ".\.vscode\taskPowershell\fetchRemoteGit.ps1"
+			rem 2026.10.21 腳本改放Zed全域資料夾，所有專案共用同一份，個別專案不再放fetchRemoteGit.ps1 
+			pwsh -File "%APPDATA%\Zed\taskScript\fetchRemoteGit.ps1"
 			rem 2026.08.06 若更新失敗，不要直接離開，這樣才能看錯誤訊息 
 			if "!errorlevel!" neq "0" (
 				set isExitAfterSync=false

@@ -89,7 +89,8 @@ if %isOpenEclipse% equ true (
 rem 開啟cursor 
 rem 2026.01.22 參考開啟eclipse方式 
 if %isOpenCursor% equ true (
-	set openCursorBatDir=D:\workspace\開啟程式編輯器
+	rem 2026.10.22 bat依編輯器分到cursor、zed目錄 
+	set openCursorBatDir=D:\workspace\開啟程式編輯器\cursor
 	if exist "!openCursorBatDir!" (
 		rem 2026.03.16 不知道為什麼換成start "" /b cmd /c才開得了 
 		rem 2026.05.07 增加經濟部OA_docker 
@@ -97,19 +98,19 @@ if %isOpenCursor% equ true (
 		rem 2026.09.30 增加國發會_export_pdf 
 		rem 2026.10.18 設定檔改用zed開啟 
 		cd /d "!openCursorBatDir!"
-		rem start "" /b cmd /c "cursor_農業部.bat" && timeout /t 5 /nobreak>nul
-		start "" /b cmd /c "cursor_智慧局.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_智慧局_111增修.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_國發會.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_國發會_111增修.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_農險基金.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_經濟部.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_個資處.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_經濟部OA.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_經濟部OA_docker.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_衛福部OA.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_經濟部EM.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "cursor_國發會_export_pdf.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "農業部.bat" && timeout /t 5 /nobreak>nul
+		start "" /b cmd /c "智慧局.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "智慧局_111增修.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "國發會.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "國發會_111增修.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "農險基金.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "經濟部.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "個資處.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "經濟部OA.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "經濟部OA_docker.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "衛福部OA.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "經濟部EM.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "國發會_export_pdf.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
 	)
 )
@@ -117,7 +118,8 @@ if %isOpenCursor% equ true (
 rem 開啟zed 
 rem 2026.10.18 參考開啟cursor方式 
 if %isOpenZed% equ true (
-	set openZedBatDir=D:\workspace\開啟程式編輯器
+	rem 2026.10.22 bat依編輯器分到cursor、zed目錄 
+	set openZedBatDir=D:\workspace\開啟程式編輯器\zed
 	if exist "!openZedBatDir!" (
 		cd /d "!openZedBatDir!"
 		start "" /b cmd /c "MOADoms.bat" && timeout /t 5 /nobreak>nul
@@ -132,7 +134,7 @@ if %isOpenSourceGit% equ true (
 	start "" /min "D:\Tools\BC\SourceGit\SourceGit.exe" 
 )
 
-rem 開啟chrome
+rem 開啟chrome 
 if %isOpenChrome% equ true (
 	start "" /min "C:\Program Files\Google\Chrome\Application\chrome.exe"
 )

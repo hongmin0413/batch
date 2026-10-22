@@ -1,9 +1,12 @@
 # batch
+
+* 複製設定檔，再依照本機環境填寫：
+    ```powershell
+    copy ./config_example.ini ./config.ini
+    ```
+
 * gitBatch/XXX.bat：
 	* 參照gitBatch/README.md
-
-* openIde/XXX.bat：
-	* 參照openIde/README.md
 
 * backup.bat：
 	* 備份重要資料至硬碟中
