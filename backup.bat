@@ -69,16 +69,19 @@ set fileName=h2testw
 call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份JavaDoc 
-set fileName=JavaDoc
-call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2026.10.23 不再備份 
+rem set fileName=JavaDoc
+rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份JavaImage 
-set fileName=JavaImage
-call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2026.10.23 不再備份 
+rem set fileName=JavaImage
+rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 備份javaWebSetting 
-set fileName=javaWebSetting
-call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2026.10.23 不再備份 
+rem set fileName=javaWebSetting
+rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 rem ==============================以上為C槽的檔案===================================== 
 rem ==============================以下為D槽的檔案===================================== 
 :disc_d
@@ -92,8 +95,9 @@ call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2025.01.19 增加備份apache-tomcat(將所有tomcat整合在一起) 
 rem 2025.06.19 修正備份失敗的問題 
-set fileName=apache-tomcat
-call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2026.10.23 不再備份 
+rem set fileName=apache-tomcat
+rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2024.10.06 增加備份batch 
 rem 2026.08.29 不再備份 

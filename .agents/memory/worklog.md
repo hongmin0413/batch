@@ -82,3 +82,29 @@
 - 新增 `openIde\README.md`（仿 gitBatch 的格式：檔案結構說明、操作流程），根目錄 README 的 openIde 段改為參照它。
 - `openIde_example.bat`：移除說明註解（說明已在 `openIde\README.md`），只留兩個被註解的 call。
 - `openIde\README.md`：新專案步驟補上「刪除不用的 call」。
+
+## 2026-10-21
+- fetch remote git(alt+g) 從 alms 移到編輯器全域設定：Zed 全域 tasks.json、Cursor 全域 tasks.json，腳本放 %APPDATA%\Zed\taskScript\fetchRemoteGit.ps1(git 改用完整路徑 C:\Program Files\Git\cmd\git.exe 呼叫)；alms 的 .zed/tasks.json、.vscode/tasks.json 移除該 task，刪除 taskScript/fetchRemoteGit.ps1。其他非 personal 專案的 fetchRemoteGit.ps1 內容一樣(alms 版多了「建立本地沒有、遠端有的分支」那段)，所以共用 alms 版；D:\SVN\svnUpdateToGit_com.bat 也改呼叫全域腳本
+- 全域 Zed 腳本(放 `%APPDATA%\Zed\taskScript\`，所有專案共用，不在 alms 裡；SourceGit 自訂動作與 Zed task 共用)：
+  - `fetchRemoteGit.ps1`：fetch 全部遠端並建立本地沒有、遠端有的分支(Zed alt+g、SourceGit「同步遠端git至本地git」、svn bat 都用它；Cursor 全域 taskScript 有一份相同的)。
+  - `compareCurrentFile.ps1`：Zed F3，目前檔案與 git 版本比較(未暫存：index vs 檔案；已暫存：HEAD vs index，index 那份唯讀；新檔案、已刪除也處理)，開在目前專案視窗。
+  - `resolveMergeConflicts.ps1`：SourceGit「解決合併衝突」，把衝突檔拆成左＝對方(`:3:`)、右＝自己(去掉衝突標記只留 ours)用 Zed 比對，原檔先備份到備份區(`index.tsv` 記錄，保留 30 天)；專案已在 Zed 開著就用同一個視窗，否則用該專案開新視窗。
+  - `restoreMergeConflicts.ps1`：SourceGit「還原合併衝突」，列出目前專案的備份，勾選後還原成有衝突標記的樣子(已編輯過會標示)；失敗才跳訊息。
+  - `skipWorktree.ps1`：SourceGit 檔案右鍵「skip-worktree」，失敗時用簡短視窗說明原因(已是 skip-worktree、已暫存的新檔案、未追蹤、被 .gitignore 忽略)；`skipWorktreePick.ps1`：SourceGit「取消 skip-worktree」，列出已 skip-worktree 的檔案勾選取消，🔍 可與目前檔案比較。
+- 用 alms 實測 resolve merge conflict：對 `.vscode/settings_example.jsonc`(stash pop 衝突，`stash@{0}`「為了測試resolve merge confilct」保留)左邊顯示對方 `v2.0.0`、右邊只留自己 `v3.0.0`，備份再還原 byte 相同、重複備份只留一份；測完用 `git reset --merge` 還原衝突(stash pop 衝突沒有 MERGE_HEAD，`merge --abort` 不能用，SourceGit 也不會出現黃色提示)，工作目錄回到只剩未追蹤的 `.zed/`。SourceGit 另加自訂動作「放棄合併」(直接執行 `git.exe reset --merge`，沒有腳本)。
+- SourceGit 自訂動作與腳本對照：同步遠端git至本地git→fetchRemoteGit.ps1；解決合併衝突→resolveMergeConflicts.ps1；還原合併衝突→restoreMergeConflicts.ps1；放棄合併→git reset --merge；skip-worktree(檔案範圍)→skipWorktree.ps1；取消 skip-worktree→skipWorktreePick.ps1；svnUpdate_com、svnUpdateToGit_com.bat→`D:\SVN` 的同名 bat。F3 的 compareCurrentFile.ps1 只有 Zed 用，SourceGit 沒有對應動作。
+
+## 2026-10-22
+- 全域 resolveMergeConflicts.ps1 改版（%APPDATA%\Zed\taskScript）：(1) 比較只看有衝突的地方：左＝衝突處放對方內容、右＝衝突處只留我方內容，沒衝突處(含自動合併成功)左右相同；有標記時兩邊都從工作檔的標記取出，沒標記時左邊用 git merge-file --theirs 從 :1:/:2:/:3: 重算，缺我方或對方版本、二進位檔退回用 :3: 完整版本。(2) 開啟哪些：有任何衝突檔還有標記(第一次)就直接開全部並改寫成只留我方內容；之後(都沒標記、還沒 git add)跳對話框勾選(預設都不勾、有「全選／取消全選」，按「開啟」)。(3) 拿掉備份機制與 restoreMergeConflicts.ps1(已刪)：要回到有標記用 git checkout -m -- 檔案，放棄合併用 git reset --merge(用暫存 git 專案實測：已暫存、未暫存、自動合併的檔案都會回到合併前，合併前就有的無關修改保留)。SourceGit 的「還原合併衝突」自訂動作由使用者自行刪除；備份資料夾 %LOCALAPPDATA%\Zed\MergeConflictBackups 仍在，可刪。實測：用暫存 git 專案(衝突、delete/modify、自動合併)的 -DryRun，第一次與第二次左邊內容相同，對話框能正常顯示；對話框內「全選」按鈕的實際點擊沒有自動化測試。
+- resolveMergeConflicts.ps1 的對話框調整：「全選」改成標題列第一欄的核取方塊(蓋在標題儲存格上的 CheckBox，全部勾了自動勾起來；踩坑：點它之前要 EndEdit 並把 CurrentCell 設 null，不然目前選取的第一列會被舊值蓋回去而沒勾到)，拿掉底下的全選按鈕；新增「狀態」欄(目前檔案與 git merge-file --ours 的結果比較，拿掉  後不同＝已編輯，已編輯用橘色字)。用暫存 git 專案，視窗截圖＋模擬滑鼠點擊實測：全選／取消全選、逐列勾滿後標題自動勾起、A 未編輯／B(多加一行)已編輯都正確。實測時有一次視窗沒在最前面，模擬的點擊點到 Zed 編輯器(只移動游標，沒有改檔)，之後改成先設視窗置頂並確認點擊位置是該視窗才點。
+- 對話框「已編輯」改成紅色，選取那一列時也維持紅色(DataGridView 選取時字色會被 SelectionForeColor 蓋成黑色，要對那個儲存格另外設 Style.SelectionForeColor)；截圖實測選取已編輯列仍是紅字。
+- 兩個勾選對話框(resolveMergeConflicts.ps1、skipWorktreePick.ps1)新增「備註」欄與編號提示：(1) 解決合併衝突：目前檔案與 git merge-file --theirs 的結果完全一樣(拿掉  後比)就標綠色「與對方相同」(左右已沒有差異)，狀態欄仍有已編輯／未編輯；(2) 取消 skip-worktree：目前檔案與 index 版本(git show :./檔案)完全一樣就標綠色「與index相同」，比較按鈕欄往右移一欄；(3) 上方提示改成 1. 2. 3. 三行(標籤高度 84)。暫存 git 專案截圖實測：A 改成對方內容＝已編輯＋與對方相同、B 多一行＝已編輯、C 未動＝未編輯；skip-worktree 的 same.txt 標與index相同、changed.txt 不標。截圖時視窗要先設置頂並多等幾秒，不然 MainWindowHandle 抓不到會截到別的畫面。
+
+## 2026-10-23
+
+- `%APPDATA%\Zed\taskScript\fetchRemoteGit.ps1`：修正 `fatal: refusing to fetch into branch ... checked out at ...`。分支被其他 worktree checkout 時不能用 `fetch 遠端 分支:分支` 更新，改為先 fetch，再用 `git -C <worktree路徑> merge --ff-only` 快轉（以 `git worktree list --porcelain` 取得分支對應路徑）。
+- 從 alms 分支 dev-change-to-zed 的 worklog 搬來 SourceGit、Zed 全域腳本相關紀錄（fetchRemoteGit、compareCurrentFile、resolveMergeConflicts、restoreMergeConflicts、skipWorktree 等），依原日期放在 2026-10-21、2026-10-22，並從 alms 的 worklog 刪除（alms 尚未 commit）。
+- 新增 compare config：	askScript\compareConfig.ps1（從 alms 搬來，只留 Zed，比較 config.ini 與 config_example.ini）、.zed\tasks.json 的 compare config task（alt+c 用 Zed 全域 keymap）。只做語法檢查，尚未在 Zed 內按 alt+c 實測。
+- 新增記憶 zed-task-pitfalls.md（Zed task 的 command＋args 會被接成一串交給 pwsh -C）；alms worklog 的原句保留。
+- `computerPowerUp.bat`：bcompare 區塊在 cloud 判斷之外增加 6 個 `local <--> ...` 比對（gitSetting、ideSetting-cursor、ideSetting-zed、powershellSetting、openIde-openCursor.bat、openIde-openZed.bat），預設以 `rem` 註解；Beyond Compare 的工作階段需存在同名項目才能開。
+- 修正 	askScript\compareConfig.ps1：只有一組比較檔案時，@(@(a, b)) 會被 PowerShell 展開成一維，oreach 取到的是字串，$pair[0] 變成第一個字元，導致誤報「略過(檔案不存在)：c / o」。改成 @(,@(a, b))（前面加逗號）。踩坑：從 alms（3 組）搬到只有 1 組的專案時要注意；config.ini 有隱藏屬性但 Test-Path 找得到，不是原因。

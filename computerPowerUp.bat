@@ -3,7 +3,7 @@ chcp 65001>nul
 
 rem 是否開啟應用程式的布林值 
 set isOpenCursor=false
-set isOpenZed=false
+set isOpenZed=true
 set isOpenSourceGit=true
 set isOpenQ-dir=true
 set isOpenBcompare=true
@@ -42,15 +42,17 @@ rem 2026.10.18 增加開啟Zed
 if %isOpenZed% equ true (
 	set openZedDir=D:\githubWorkspace\01_開啟程式編輯器\zed
 	if exist "!openZedDir!" (
+	    rem 2026.10.23 增加program-setting.bat 
 		cd /d "!openZedDir!"
 		rem start "" /b cmd /c "ai-produce-sql-hex.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "ai-tool-hex.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "alms.bat" && timeout /t 5 /nobreak>nul
+		start "" /b cmd /c "alms.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "batch.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "batch-dev.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "chat-talker-hex.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "check-national-id-number.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "linebot-guess-number.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "program-setting.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "station-typing.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
 	)
@@ -61,7 +63,7 @@ if %isOpenSourceGit% equ true (
 	start "" /min "D:\SourceGit\SourceGit.exe" 
 )
 
-rem 開啟Q-dir
+rem 開啟Q-dir 
 if %isOpenQ-dir% equ true (
 	start "" /min "D:\Q-Dir\Q-Dir.exe" 
 )
@@ -79,14 +81,19 @@ if %isOpenBcompare% equ true (
 	rem 2026.03.16 batch增加cloud，當有連接到雲端時 
 	rem 2026.08.01 alms增加cloud，當有連接到雲端時 
 	rem 2026.08.29 調整比對名稱 
+	rem 2026.10.23 增加program-setting，並移除沒用到的 
 	if exist "!cloudDir!" (
 		start "" /min "!bcompareExe!" "cloud <--> alms" && timeout /t 5 /nobreak>nul
 		rem start "" /min "!bcompareExe!" "batch <--> batch-dev" && timeout /t 5 /nobreak>nul
 		start "" /min "!bcompareExe!" "cloud <--> batch-dev" && timeout /t 5 /nobreak>nul
-		rem start "" /min "!bcompareExe!" "cloud <--> cursor" && timeout /t 5 /nobreak>nul
-		rem start "" /min "!bcompareExe!" "cloud <--> zed" && timeout /t 5 /nobreak>nul
-		rem start "" /min "!bcompareExe!" "cloud <--> powershell" && timeout /t 5 /nobreak>nul
+		start "" /min "!bcompareExe!" "cloud <--> program-setting" && timeout /t 5 /nobreak>nul
 	)
+	rem start "" /min "!bcompareExe!" "local <--> gitSetting" && timeout /t 5 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "local <--> ideSetting-cursor" && timeout /t 5 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "local <--> ideSetting-zed" && timeout /t 5 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "local <--> powershellSetting" && timeout /t 5 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "local <--> openIde-openCursor.bat" && timeout /t 5 /nobreak>nul
+	rem start "" /min "!bcompareExe!" "local <--> openIde-openZed.bat" && timeout /t 5 /nobreak>nul
 )
 
 rem 開啟chrome 
