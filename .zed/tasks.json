@@ -1,0 +1,10 @@
+[
+  {
+    //開啟設定檔與範例檔的比較【alt+c】
+    //2026.10.23 直接執行腳本，不用pwsh -File多包一層(Zed本來就是用pwsh執行)
+    "label": "compare config",
+    "command": "./taskScript/compareConfig.ps1",
+    "reveal": "never",
+    "hide": "on_success"
+  }
+]

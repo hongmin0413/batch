@@ -39,15 +39,11 @@ if "%action%" equ "copyFile" (
 rem 2026.10.03 增加執行mysql、tidb的SQL、還原mysql、tidb的備份檔 
 ) else if "%action%" equ "executeMysql" (
 	set "mysqlInfo=%~2"
-	rem 查詢結果的輸出檔，省略就直接顯示在畫面上 
 	set "mysqlOutFile=%~3"
-	rem SQL不放在參數，改放在呼叫前設定的mysqlSql，因為SQL若有括號，放在參數會讓這個判斷式解析錯誤 
 	call :executeMysql
 ) else if "%action%" equ "restoreMysql" (
 	set "mysqlInfo=%~2"
-	rem 備份檔的db名稱 
 	set mysqlDbName=%~3
-	rem 還原後的db名稱 
 	set mysqlNewDbName=%~4
 	set mysqlType=%~5
 	call :restoreMysql
@@ -248,11 +244,11 @@ if "!restoreDbCount!" neq "0" (
 )
 set "mysqlRestoreSql=!mysqlDbSql!.restore.sql"
 echo 開始還原%mysqlType%的db-%mysqlDbName%為db-%mysqlNewDbName%... 
-rem 備份檔中的CREATE DATABASE、USE、檢視中帶資料庫名稱的資料表，都改成新的db名稱 
+rem 備份檔中的CREATE DATABASE、USE、檢視中帶資料庫名稱的資料表，都改成新的資料庫名稱 
 rem 這行PowerShell指令不能有脫字符號，因為開啟延遲變數展開時，cmd會把它吃掉 
 powershell -NoProfile -Command "$s='%mysqlDbName%'; $d='%mysqlNewDbName%'; $t=[IO.File]::ReadAllText('!mysqlDbSql!',[Text.Encoding]::UTF8); $t=[regex]::Replace($t,'(CREATE DATABASE .*?)`'+$s+'`','${1}`'+$d+'`'); $t=[regex]::Replace($t,'USE `'+$s+'`;','USE `'+$d+'`;'); $t=$t.Replace('`'+$s+'`.','`'+$d+'`.'); [IO.File]::WriteAllText('!mysqlRestoreSql!',$t,(New-Object Text.UTF8Encoding($false)))"
 if errorlevel 1 (
-	echo 轉換備份檔的db名稱失敗 
+	echo 轉換備份檔的資料庫名稱失敗 
 	endlocal & exit /b 1
 )
 %mysqlInDocker% sh -c "export MYSQL_PWD=!MYSQL_PWD!; ^\"%mysqlPath%^\" !mysqlInfoNoPwd! --default-character-set=utf8mb4" < "!mysqlRestoreSql!"
