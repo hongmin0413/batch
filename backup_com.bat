@@ -311,7 +311,8 @@ if "%postgresDbName%" neq "" (
 			)
 			rem 先備份在c槽，再複製到d槽 
 			echo 開始備份【%orgName%】版的db-!singlePostgresDbName!... 
-			set postgresBackupParam=--no-tablespaces
+			rem 2026.10.30 增加--create，備份檔才會有CREATE DATABASE 
+			set postgresBackupParam=--no-tablespaces --create
 			%postgresInDocker% sh -c "export PGPASSWORD=!PGPASSWORD!; ^\"%pgDumpPath%^\" !postgresInfoNoPwd! -d ^\"!singlePostgresDbName!^\" !postgresBackupParam!" > "!postgresDbSql!"
 			copy /y "!postgresDbSql!" "!postgresDbSql2!">nul 
 			echo 【%orgName%】版的db-!singlePostgresDbName!備份完畢 

@@ -108,3 +108,11 @@
 - 新增記憶 zed-task-pitfalls.md（Zed task 的 command＋args 會被接成一串交給 pwsh -C）；alms worklog 的原句保留。
 - `computerPowerUp.bat`：bcompare 區塊在 cloud 判斷之外增加 6 個 `local <--> ...` 比對（gitSetting、ideSetting-cursor、ideSetting-zed、powershellSetting、openIde-openCursor.bat、openIde-openZed.bat），預設以 `rem` 註解；Beyond Compare 的工作階段需存在同名項目才能開。
 - 修正 	askScript\compareConfig.ps1：只有一組比較檔案時，@(@(a, b)) 會被 PowerShell 展開成一維，oreach 取到的是字串，$pair[0] 變成第一個字元，導致誤報「略過(檔案不存在)：c / o」。改成 @(,@(a, b))（前面加逗號）。踩坑：從 alms（3 組）搬到只有 1 組的專案時要注意；config.ini 有隱藏屬性但 Test-Path 找得到，不是原因。
+
+## 2026-10-30
+
+- `backup_com.bat` 的 postgres 備份參數加 `--create`（pg_dump 預設不輸出 CREATE DATABASE，mysqldump 的 `--databases` 才會）。實測：用同一組指令把 moeaoa 備份成 `ZZ_test_moeaoa.sql`，放在 `C:\backup\經濟部OA_docker` 與 `D:\APPS\docker\DB\backup`（未覆蓋正式檔），檔案第 26 行有 CREATE DATABASE、有 130 個 CREATE TABLE。
+- 確認沒問題後，把 `ZZ_test_moeaoa.sql` 覆蓋成正式的 `moeaoa.sql`（上述兩處，history 不動），測試檔已不存在。
+- 新增 `D:\APPS\docker\DB\backup\備份指令.txt`：postgres、mysql、tidb 的備份與還原指令，用 `<host>`、`<port>`、`<container>` 等當變數，不含密碼。
+- `備份指令.txt` 改成只留 postgresql，分「在 docker」與「不在 docker」兩個版本（備份、還原各一組），不含密碼。
+- `備份指令.txt` 改寫成 `備份指令.md`（變數表格、程式碼區塊），舊的 txt 已刪除。
