@@ -344,7 +344,8 @@ if "%copyFileName%" neq "" (
 	set file=%copyFilePath%\%copyFileName%
 	if exist "!file!" (
 		echo 開始複製【!file!】... 
-		robocopy /mir /mt:32 "!file!" "%backupRoot%\%copyFileName%">nul 
+		rem 2026.11.03 修正遇到lock檔會卡很久的問題 
+		robocopy /mir /mt:32 /r:1 /w:1 "!file!" "%backupRoot%\%copyFileName%">nul 
 		echo 【!file!】複製完畢
 	)else (
 		echo 【!file!】不存在，不複製

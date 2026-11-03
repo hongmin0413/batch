@@ -120,3 +120,5 @@
 ## 2026-11-03
 
 - `checkBattery.bat`：電量一直是 0%（昨天 23H2 升 26H2，wmic 被移除，for /f 抓不到值停在預設 0／未充電）。兩處 `wmic` 改成一次 `powershell Get-CimInstance Win32_Battery` 取出狀態與電量；全專案只有這支用 wmic。實測（複製檔加 echo）讀到 status=2 remain=79。記憶補進 bat-pitfalls.md。
+- `backup_com.bat` 雙擊閃退的原因：實際執行的副本 backup_com.bat 的換行是 LF（repo 內是 CRLF，內容相同），cmd 讀中文時整份解析錯亂。把 repo 的 CRLF 版覆蓋過去後已修好（先確認去掉 CR 後內容一致）。測試時用截出 MSSQL 段落的暫存 bat 實測：CRLF 能正常備份 eipdb，LF 版會出現一堆「不是內部或外部命令」。測試用的暫存備份資料夾需使用者手動刪除（刪除被系統擋下）。
+- `backup_com.bat` 備份 SourceGit 時卡很久：SourceGit 開著，`data\process.lock` 被鎖住，robocopy 預設重試 100 萬次、每次等 30 秒。關掉 SourceGit 後仍沒繼續，改手動 robocopy docker（4718 個檔案，無失敗）。`backup_com.bat`、`util.bat` 的 robocopy 都加 `/r:1 /w:1`（鎖住的檔案重試 1 次、等 1 秒就跳過），並同步到執行副本。
