@@ -116,3 +116,7 @@
 - 新增 `D:\APPS\docker\DB\backup\備份指令.txt`：postgres、mysql、tidb 的備份與還原指令，用 `<host>`、`<port>`、`<container>` 等當變數，不含密碼。
 - `備份指令.txt` 改成只留 postgresql，分「在 docker」與「不在 docker」兩個版本（備份、還原各一組），不含密碼。
 - `備份指令.txt` 改寫成 `備份指令.md`（變數表格、程式碼區塊），舊的 txt 已刪除。
+
+## 2026-11-03
+
+- `checkBattery.bat`：電量一直是 0%（昨天 23H2 升 26H2，wmic 被移除，for /f 抓不到值停在預設 0／未充電）。兩處 `wmic` 改成一次 `powershell Get-CimInstance Win32_Battery` 取出狀態與電量；全專案只有這支用 wmic。實測（複製檔加 echo）讀到 status=2 remain=79。記憶補進 bat-pitfalls.md。

@@ -4,15 +4,13 @@ chcp 65001>nul
 set msgExe=%~dp0%\msg.exe
 
 setlocal enabledelayedexpansion
-rem 取得是否為充電狀態(1=否，2=是)
+rem 取得是否為充電狀態(1=否，2=是)及電量 
+rem 2026.10.03 wmic已被Windows移除，改用PowerShell的CIM 
 set batteryStatus=1
-for /f "tokens=1,* delims= " %%i in ('wmic Path Win32_Battery Get BatteryStatus^| findstr /r "[0-9]"') do (
-	set batteryStatus=%%i
-)
-rem 取得電量
 set batteryRemain=0
-for /f "tokens=1,* delims= " %%i in ('wmic Path Win32_Battery Get EstimatedChargeRemaining^| findstr /r "[0-9]"') do (
-	set batteryRemain=%%i
+for /f "tokens=1,2" %%i in ('powershell -NoProfile -Command "$b=@(Get-CimInstance Win32_Battery)[0]; if($b){$b.BatteryStatus.ToString()+' '+$b.EstimatedChargeRemaining}"') do (
+	set batteryStatus=%%i
+	set batteryRemain=%%j
 )
 
 rem 顯示電池狀態，有msg.exe>用視窗顯示，無msg.exe>直接顯示在cmd上 

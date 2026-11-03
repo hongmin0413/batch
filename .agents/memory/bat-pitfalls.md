@@ -6,3 +6,4 @@
 - 括號區塊內的 `rem` 註解不可有括號。
 - 延遲變數展開開啟時，PowerShell 指令不可有 `^`（cmd 會吃掉）。
 - 環境的 python 是 Windows Store 假檔，不能用；批次改檔用 node 或 Edit 工具。
+- Windows 11 新版(24H2 起 wmic 變隨選功能，26H2 已沒有)不能用 `wmic`；取硬體資訊改用 `powershell -NoProfile -Command "Get-CimInstance ..."`（家用版也可用）。for /f 裡的指令避免 `|`（要寫 `^|`），改在 PowerShell 內用 `@(...)[0]` 取第一筆。2026-11-03 因 checkBattery.bat 電量永遠 0% 才發現。
