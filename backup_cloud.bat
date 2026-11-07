@@ -3,7 +3,8 @@ chcp 65001>nul
 
 set msgExe=%~dp0%\msg.exe
 
-set cloudFile=C:\backupPhoneAndCloud\cloudFile
+rem 2026.11.07 調整路徑 
+set cloudFile=D:\backupPhoneAndCloud\cloudFile
 set diskBackupDisc=E:
 set backupRoot=%diskBackupDisc%\backup_cloud
 
