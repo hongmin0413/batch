@@ -43,8 +43,9 @@ rem set fileName=antigravitySetting
 rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2025.06.20 增加備份backupPhoneAndCloud_backup，用來存結構，換筆電後要複製一份並拿掉"_backup" 
-set fileName=backupPhoneAndCloud_backup
-call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+rem 2026.11.07 不再備份 
+rem set fileName=backupPhoneAndCloud_backup
+rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
 rem 2025.06.22 增加備份computerSetting 
 set fileName=computerSetting
