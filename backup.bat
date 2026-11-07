@@ -100,6 +100,10 @@ rem 2026.10.23 不再備份
 rem set fileName=apache-tomcat
 rem call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
 
+rem 2026.11.07 增加備份artcraft 
+set fileName=artcraft
+call util.bat "copyFile" "%backupPath%" "%fileDisc%" "%fileName%"
+
 rem 2024.10.06 增加備份batch 
 rem 2026.08.29 不再備份 
 rem set fileName=batch
