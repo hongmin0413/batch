@@ -97,6 +97,7 @@ if %isOpenCursor% equ true (
 		rem 2026.08.18 增加設定檔 
 		rem 2026.09.30 增加國發會_export_pdf 
 		rem 2026.10.18 設定檔改用zed開啟 
+		rem 2026.10.27 國發會_export_pdf改用zed開啟 
 		cd /d "!openCursorBatDir!"
 		rem start "" /b cmd /c "農業部.bat" && timeout /t 5 /nobreak>nul
 		start "" /b cmd /c "智慧局.bat" && timeout /t 5 /nobreak>nul
@@ -110,7 +111,6 @@ if %isOpenCursor% equ true (
 		rem start "" /b cmd /c "經濟部OA_docker.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "衛福部OA.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "經濟部EM.bat" && timeout /t 5 /nobreak>nul
-		rem start "" /b cmd /c "國發會_export_pdf.bat" && timeout /t 5 /nobreak>nul
 		cd "%~dp0"
 	)
 )
@@ -121,7 +121,18 @@ if %isOpenZed% equ true (
 	rem 2026.10.22 bat依編輯器分到cursor、zed目錄 
 	set openZedBatDir=D:\workspace\開啟程式編輯器\zed
 	if exist "!openZedBatDir!" (
+	    rem 2026.10.27 增加部分原本用cursor開啟的系統 
 		cd /d "!openZedBatDir!"
+		rem start "" /b cmd /c "農業部.bat" && timeout /t 5 /nobreak>nul
+		start "" /b cmd /c "智慧局.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "國發會.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "農險基金.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "經濟部.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "個資處.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "經濟部OA_docker.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "衛福部OA.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "經濟部EM.bat" && timeout /t 5 /nobreak>nul
+		rem start "" /b cmd /c "國發會_export_pdf.bat(之後再用)" && timeout /t 5 /nobreak>nul
 		start "" /b cmd /c "MOADoms.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "OASystem.bat" && timeout /t 5 /nobreak>nul
 		rem start "" /b cmd /c "EMSystem.bat" && timeout /t 5 /nobreak>nul

@@ -311,7 +311,8 @@ if "%postgresDbName%" neq "" (
 			)
 			rem 先備份在c槽，再複製到d槽 
 			echo 開始備份【%orgName%】版的db-!singlePostgresDbName!... 
-			set postgresBackupParam=--no-tablespaces
+			rem 2026.10.30 增加--create，備份檔才會有CREATE DATABASE 
+			set postgresBackupParam=--no-tablespaces --create
 			%postgresInDocker% sh -c "export PGPASSWORD=!PGPASSWORD!; ^\"%pgDumpPath%^\" !postgresInfoNoPwd! -d ^\"!singlePostgresDbName!^\" !postgresBackupParam!" > "!postgresDbSql!"
 			copy /y "!postgresDbSql!" "!postgresDbSql2!">nul 
 			echo 【%orgName%】版的db-!singlePostgresDbName!備份完畢 
@@ -343,7 +344,8 @@ if "%copyFileName%" neq "" (
 	set file=%copyFilePath%\%copyFileName%
 	if exist "!file!" (
 		echo 開始複製【!file!】... 
-		robocopy /mir /mt:32 "!file!" "%backupRoot%\%copyFileName%">nul 
+		rem 2026.11.03 修正遇到lock檔會卡很久的問題 
+		robocopy /mir /mt:32 /r:1 /w:1 "!file!" "%backupRoot%\%copyFileName%">nul 
 		echo 【!file!】複製完畢
 	)else (
 		echo 【!file!】不存在，不複製

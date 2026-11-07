@@ -108,3 +108,17 @@
 - 新增記憶 zed-task-pitfalls.md（Zed task 的 command＋args 會被接成一串交給 pwsh -C）；alms worklog 的原句保留。
 - `computerPowerUp.bat`：bcompare 區塊在 cloud 判斷之外增加 6 個 `local <--> ...` 比對（gitSetting、ideSetting-cursor、ideSetting-zed、powershellSetting、openIde-openCursor.bat、openIde-openZed.bat），預設以 `rem` 註解；Beyond Compare 的工作階段需存在同名項目才能開。
 - 修正 	askScript\compareConfig.ps1：只有一組比較檔案時，@(@(a, b)) 會被 PowerShell 展開成一維，oreach 取到的是字串，$pair[0] 變成第一個字元，導致誤報「略過(檔案不存在)：c / o」。改成 @(,@(a, b))（前面加逗號）。踩坑：從 alms（3 組）搬到只有 1 組的專案時要注意；config.ini 有隱藏屬性但 Test-Path 找得到，不是原因。
+
+## 2026-10-30
+
+- `backup_com.bat` 的 postgres 備份參數加 `--create`（pg_dump 預設不輸出 CREATE DATABASE，mysqldump 的 `--databases` 才會）。實測：用同一組指令把 moeaoa 備份成 `ZZ_test_moeaoa.sql`，放在 `C:\backup\經濟部OA_docker` 與 `D:\APPS\docker\DB\backup`（未覆蓋正式檔），檔案第 26 行有 CREATE DATABASE、有 130 個 CREATE TABLE。
+- 確認沒問題後，把 `ZZ_test_moeaoa.sql` 覆蓋成正式的 `moeaoa.sql`（上述兩處，history 不動），測試檔已不存在。
+- 新增 `D:\APPS\docker\DB\backup\備份指令.txt`：postgres、mysql、tidb 的備份與還原指令，用 `<host>`、`<port>`、`<container>` 等當變數，不含密碼。
+- `備份指令.txt` 改成只留 postgresql，分「在 docker」與「不在 docker」兩個版本（備份、還原各一組），不含密碼。
+- `備份指令.txt` 改寫成 `備份指令.md`（變數表格、程式碼區塊），舊的 txt 已刪除。
+
+## 2026-11-03
+
+- `checkBattery.bat`：電量一直是 0%（昨天 23H2 升 26H2，wmic 被移除，for /f 抓不到值停在預設 0／未充電）。兩處 `wmic` 改成一次 `powershell Get-CimInstance Win32_Battery` 取出狀態與電量；全專案只有這支用 wmic。實測（複製檔加 echo）讀到 status=2 remain=79。記憶補進 bat-pitfalls.md。
+- `backup_com.bat` 雙擊閃退的原因：實際執行的副本 backup_com.bat 的換行是 LF（repo 內是 CRLF，內容相同），cmd 讀中文時整份解析錯亂。把 repo 的 CRLF 版覆蓋過去後已修好（先確認去掉 CR 後內容一致）。測試時用截出 MSSQL 段落的暫存 bat 實測：CRLF 能正常備份 eipdb，LF 版會出現一堆「不是內部或外部命令」。測試用的暫存備份資料夾需使用者手動刪除（刪除被系統擋下）。
+- `backup_com.bat` 備份 SourceGit 時卡很久：SourceGit 開著，`data\process.lock` 被鎖住，robocopy 預設重試 100 萬次、每次等 30 秒。關掉 SourceGit 後仍沒繼續，改手動 robocopy docker（4718 個檔案，無失敗）。`backup_com.bat`、`util.bat` 的 robocopy 都加 `/r:1 /w:1`（鎖住的檔案重試 1 次、等 1 秒就跳過），並同步到執行副本。
